@@ -15,7 +15,7 @@ drive_market_share,Drive Market Relevance,Number
 drive_time,Typical Guest Drive Time,Dropdown
 competitors,Named Competitors,Multi Line
 campaign_objective,Campaign Objective,Dropdown
-monthly_budget,Monthly Advertising Budget,Number
+monthly_budget,Recommended Monthly Budget,Number
 booking_window,Booking Window,Dropdown
 current_media,Current Paid Media,Single Line
 offers_constraints,Offers and Constraints,Multi Line
@@ -26,7 +26,7 @@ contact_phone,Contact Phone,Contact Phone
 contact_role,Contact Role,Single Line
 weather_marketing_readiness_score,Weather Marketing Readiness Score,Number
 estimated_targetable_pool,Estimated Targetable Pool,Number
-recommended_monthly_budget,Monthly Advertising Budget,Number
+recommended_monthly_budget,Recommended Monthly Budget,Number
 resort_location_resolved,Resolved Resort Location,Single Line
 report_json,Ski Resort Report JSON,Multi Line
 source,Lead Source,Single Line
@@ -39,10 +39,4 @@ minimum_activation_share,Minimum Activation Share,Number
 estimated_targeted_skiing_households,Estimated Targeted Skiing Households,Number
 estimated_budget_protected,Estimated Budget Protected,Number
 estimated_budget_protected_percent,Estimated Budget Protected Percent,Number
-base_elevation_ft,Base Elevation (ft),Number
-summit_elevation_ft,Summit Elevation (ft),Number
-resort_latitude,Resort Latitude,Single Line
-resort_longitude,Resort Longitude,Single Line
-weather_marketing_readiness_band,Weather Readiness Band,Single Line
-media_lead_days,Media Lead Days,Number
-forecast_activation_days,Forecast Activation Days (16-day),Number
+report_pdf_url,Report PDF URL,Website

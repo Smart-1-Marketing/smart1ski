@@ -1,123 +1,110 @@
-# Smart 1 Boat Dealer Market Intelligence
+# Smart 1 Ski Resort Package
 
-A multi-step Smart 1 Marketing lead tool for boat dealers. It creates an AI planning report with:
+A multi-step lead funnel and planning tool for ski resorts. It:
 
-- Ranked boating-access and conquest geofences
-- Marinas, launches, storage/service, marine retail, event venues, and competitors
-- Estimated target-area population and households
-- Low/base/high estimate of likely boat-owner households
-- Waterway and lake-community overview
-- Priority ZIP/community targets
-- Audience segments and media-budget allocation
-- Weather-trigger budget plan
-- Smart 1 Suite webhook payload
-- Print-to-PDF report
+- Resolves the resort ZIP code without a paid API key.
+- Uses Open-Meteo historical weather data when available.
+- Estimates snowmaking, powder, bluebird, rain-risk and wind-risk days.
+- Creates feeder-market and targetable winter-sports audience estimates.
+- Recommends geofence categories, seasonal phases and weather triggers.
+- Builds a monthly Connected TV, programmatic display, and digital audio allocation.
+- Relays the complete submission and report to a Smart 1 Suite webhook.
+- Produces a client-facing report that can be printed or saved as a PDF.
 
-## Important limitation
+## GitHub Upload
 
-This version intentionally uses AI planning estimates instead of paid maps, geocoding, census, or state registration APIs. It does not claim live verification. Before media activation, a strategist should verify each physical location and build the final polygons in the advertising platform.
+Upload all files and folders in this package:
 
-## Project structure
+- `server.js`
+- `package.json`
+- `render.yaml`
+- `.env.example`
+- `README.md`
+- `SMART1_SUITE_FIELDS.csv`
+- `public/index.html`
 
-```
-smart1boat/
-├── app.py               # Flask backend + OpenAI report generation + webhook
-├── templates/
-│   └── index.html       # Self-contained multi-step form (CSS + JS inlined)
-├── requirements.txt
-├── Procfile
-├── render.yaml
-├── .env.example
-└── .gitignore
-```
+Do not upload a real `.env` file.
 
-`index.html` lives in `templates/` because the backend serves it with Flask's
-`render_template("index.html")`. The page is intentionally self-contained: all
-CSS and JavaScript are inlined, so there are no separate `styles.css` or `app.js`
-files to keep in sync. This keeps the form reliable when embedded in Smart 1 Suite.
+## Render Setup
 
-> Do not commit compiled artifacts (`__pycache__/`, `*.pyc`). They are ignored in
-> `.gitignore`. Edit and deploy `app.py`, not any compiled `.pyc`.
+1. Create a new GitHub repository named `smart1ski`.
+2. Upload this package, preserving the `public` folder.
+3. In Render, choose **New > Blueprint** and select the repository.
+4. Render will read `render.yaml`.
+5. Add the environment variable:
+   - `GHL_WEBHOOK_URL` = the inbound webhook URL from Smart 1 Suite.
+6. Optional:
+   - Set `ALLOWED_ORIGIN` to the exact website origin that embeds the app.
+7. Deploy and test:
+   - `https://YOUR-RENDER-URL.onrender.com/health`
+   - `https://YOUR-RENDER-URL.onrender.com/`
 
-## Deploy to GitHub
+## Embed in Smart 1 Suite
 
-1. Create a new GitHub repository named `smart1boat`.
-2. Upload every file and folder in this project. Keep the folder structure intact (especially `templates/`).
-3. Do not upload a real `.env` file or API key.
-
-## Deploy to Render
-
-1. In Render, choose **New + > Blueprint**.
-2. Connect the `smart1boat` GitHub repository.
-3. Render will read `render.yaml`.
-4. Add the secret environment variable `OPENAI_API_KEY`.
-5. Add `SMART1_WEBHOOK_URL` for the Smart 1 Suite inbound webhook.
-6. Add `PUBLIC_BASE_URL` = your live Render URL (e.g. `https://smart1boat.onrender.com`) so the report PDF links are absolute.
-7. Keep `OPENAI_MODEL` at the default or change it to a model available in your OpenAI account.
-8. Deploy and test `/health`, then test the full form.
-
-## PDF report
-
-Every completed report is rendered to a branded PDF (via `reportlab`, pure
-Python — no system libraries needed) and written to `static/reports/`. The
-public URL is sent to Smart 1 Suite in the webhook as `report_pdf_url`, so your
-team can link or attach it with `{{contact.report_pdf_url}}`. Set `ENABLE_PDF=0`
-to turn this off. On Render's ephemeral disk the files persist for the life of
-the instance; for permanent archival, upload the bytes to S3 or the GHL Media
-Library inside `build_report_pdf()`.
-
-## Smart 1 Suite fields
-
-Recommended custom fields:
-
-- Dealer Name
-- Dealer Website
-- Dealer ZIP
-- Target Radius
-- Target Markets
-- Boat Types
-- Inventory Mix
-- Campaign Objective
-- Monthly Budget
-- Seasonality
-- Known Waterways
-- Known Competitors
-- Notes
-- Estimated Boat Owner Households
-- Boat Market Summary
-- Boat Report Status
-- Boat Report JSON (large text field, optional)
-
-The webhook sends human-readable fields plus `report_json`. If the Suite webhook ignores nested or large data, map the summary and estimated-owner fields first and store the full report externally or in a large-text custom field.
-
-## Embed on Smart 1 Suite
-
-The easiest reliable method is an iframe pointing to the Render URL:
+Use an iframe in a Custom HTML/Code block:
 
 ```html
 <iframe
   src="https://YOUR-RENDER-URL.onrender.com/"
-  style="width:100%;min-height:1200px;border:0;border-radius:12px;"
-  loading="lazy"
-  title="Boat Dealer Market Intelligence">
+  title="Ski Resort Growth and Weather Trigger Plan"
+  style="width:100%;min-height:1450px;border:0;border-radius:12px"
+  loading="lazy">
 </iframe>
 ```
 
-Using an iframe keeps the JavaScript and API request on the same Render domain and avoids cross-origin and code-block restrictions inside Smart 1 Suite.
+The backend protects the webhook URL. Do not put the Smart 1 Suite webhook directly into the public HTML.
 
-## Test locally
+## Smart 1 Suite Workflow
 
-```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-python app.py
-```
+Recommended workflow:
 
-Open `http://localhost:5000`.
+1. Inbound Webhook trigger.
+2. Create/update contact by `contact_email`.
+3. Create opportunity in pipeline: `Ski Resort Leads`.
+4. Assign owner.
+5. Store report fields.
+6. Send internal notification with report score, pool and budget.
+7. Send the prospect a confirmation email.
+8. Create follow-up task for the salesperson.
 
-## Weather-trigger targeting
+## Weather Trigger Notes
 
-The form supports three weather modes: no weather triggers, weather-enhanced pacing, and weather-trigger-only activation. Reports include suggested conditions, activation or suppression actions, lead time, applicable non-social tactics, and a budget-efficiency explanation. Social advertising is intentionally excluded from recommendations.
+The historical analysis is directional. Live campaign activation should use the client-approved weather source and operational data. Weather alone should never override lift status, road access, ticket inventory, staffing, avalanche controls or resort management decisions.
+
+## Important Corrections from the Sample Concept
+
+- The webhook is server-side, not exposed in browser code.
+- A failed webhook does not silently show a fake success.
+- ZIP validation uses a valid regular expression.
+- Audience estimates are labeled estimates rather than presented as purchased data counts.
+- ROI lift claims are not included unless Smart 1 has a source it is prepared to cite.
+- “Rollover” language is framed as an agreement-dependent budget safeguard rather than an automatic promise.
+
+
+## Added Historical Weekly and Savings Outputs
+
+The report now returns:
+
+- A week-by-week historical view across the resort's selected ski season.
+- Average qualified advertising days by season week.
+- Snowfall, snowmaking, powder, bluebird and suppression indicators by week.
+- An AI recommendation for each week: aggressive activation, selective activation, or hold/future-date offers.
+- Modeled always-on seasonal spend.
+- Modeled trigger-controlled seasonal spend.
+- Estimated budget protected by avoiding historically weak periods.
+- Estimated targeted skiing households in the feeder markets.
+
+The savings calculation is directional. It estimates budget that may be held, moved, or redirected rather than guaranteeing refunds or campaign results.
+
+
+## Channel Scope
+
+Paid social and paid search are intentionally excluded from this package.
+
+The recommended media plan is limited to:
+
+- Connected TV
+- Programmatic Display
+- Digital Audio
+
+All budget allocations, delivery estimates, savings calculations, and client-facing recommendations are based only on these three channels.

@@ -1,478 +1,235 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Free weather-triggered Ski Demand Report. See your feeder markets, targeted skiing households, weather triggers, savings model, and media plan — in about a minute.">
-<title>Ski Resort Marketing Gameplan | Smart 1 Marketing</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --navy:#1A2E58;--navy2:#274a82;--blue:#1677c8;--blue2:#3a95e0;--ice:#eaf6ff;
-  --green:#26a269;--ink:#1f2a3d;--muted:#5f6f83;--line:#dbe3ec;--bg:#f4f7fb;--white:#fff;
-  --cta:#ff6b3d;--cta2:#ff8659;--shadow:0 18px 45px rgba(20,42,77,.12);--shadow-sm:0 8px 24px rgba(20,42,77,.08)
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Montserrat,Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.6}
-h1,h2,h3,h4{margin:0;color:var(--navy);letter-spacing:-.02em;line-height:1.12}
-p{margin:0}
-a{color:inherit;text-decoration:none}
-.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
-.eyebrow{font-weight:800;letter-spacing:.15em;color:var(--blue);font-size:.72rem;text-transform:uppercase}
-.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font-family:inherit;font-weight:800;border-radius:11px;padding:15px 26px;font-size:.95rem;transition:.18s;white-space:nowrap}
-.btn-cta{background:linear-gradient(180deg,var(--cta2),var(--cta));color:#fff;box-shadow:0 10px 24px rgba(255,107,61,.32)}
-.btn-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(255,107,61,.42)}
-.btn-navy{background:var(--navy);color:#fff}
-.btn-navy:hover{background:var(--navy2)}
-.btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}
-.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
-.btn-lg{padding:17px 32px;font-size:1.02rem}
-
-/* NAV */
-.nav{position:sticky;top:0;z-index:50;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-.logo img{height:28px;display:block}
-.nav-links{display:flex;align-items:center;gap:24px}
-.nav-links a{color:#cfe0f2;font-size:.85rem;font-weight:600}
-.nav-links a:hover{color:#fff}
-.nav .btn{padding:10px 18px;font-size:.82rem}
-@media(max-width:900px){.nav-links a:not(.btn){display:none}}
-
-/* HERO */
-.hero{background:linear-gradient(90deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.80) 44%,rgba(234,246,255,.45) 100%),url('https://res.cloudinary.com/smart1labs/image/upload/v1784741287/Weather-Triggered_Ski_Marketing.png') right bottom/cover no-repeat;padding:66px 0 54px;border-bottom:1px solid var(--line)}
-.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:44px;align-items:center}
-.hero h1{font-size:clamp(2.2rem,4.8vw,3.6rem);font-weight:900;margin-bottom:18px}
-.hero h1 .u{color:var(--blue)}
-.hero-sub{font-size:1.08rem;color:var(--muted);max-width:540px;margin-bottom:26px}
-.hero-cta-row{display:flex;gap:13px;flex-wrap:wrap}
-.hero-micro{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;color:var(--muted);font-size:.78rem;font-weight:700}
-.hero-micro span{display:inline-flex;align-items:center;gap:7px}
-.hero-micro span:before{content:'✓';color:var(--green);font-weight:900}
-/* free report mini card */
-.mini{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:26px}
-.mini .tag{display:inline-block;background:var(--ice);color:var(--blue);font-weight:800;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:999px;margin-bottom:14px}
-.mini h3{font-size:1.2rem;margin-bottom:14px}
-.mini ul{list-style:none;padding:0;margin:0 0 18px}
-.mini li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--ink);padding:7px 0;border-bottom:1px solid #eef3f8}
-.mini li:last-child{border-bottom:0}
-.mini li:before{content:'❄';color:var(--blue);font-weight:900}
-.mini .btn{width:100%;justify-content:center}
-
-/* generic section */
-section.pad{padding:70px 0}
-.sec-head{text-align:center;max-width:720px;margin:0 auto 40px}
-.sec-head h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800;margin:10px 0 12px}
-.sec-head p{color:var(--muted);font-size:1.01rem}
-.tint{background:var(--bg)}
-
-/* problem */
-.p3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.pcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow-sm)}
-.pcard .i{font-size:1.7rem;margin-bottom:12px}
-.pcard h4{font-size:1.05rem;margin-bottom:7px}
-.pcard p{color:var(--muted);font-size:.88rem}
-
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
-.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:34px 24px 26px;box-shadow:var(--shadow-sm)}
-.step:before{counter-increment:s;content:counter(s);position:absolute;top:-18px;left:26px;width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-weight:900;display:grid;place-items:center;box-shadow:0 8px 16px rgba(22,119,200,.32)}
-.step h4{margin:8px 0 8px;font-size:1.05rem}
-.step p{color:var(--muted);font-size:.88rem}
-
-/* what you get */
-.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.feat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow-sm)}
-.feat .i{width:44px;height:44px;border-radius:12px;background:var(--ice);display:grid;place-items:center;font-size:1.3rem;margin-bottom:13px}
-.feat h4{font-size:1rem;margin-bottom:7px}
-.feat p{color:var(--muted);font-size:.86rem}
-
-/* your free report + sample estimate */
-.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
-.rlist{list-style:none;padding:0;margin:18px 0 0}
-.rlist li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);font-size:.92rem}
-.rlist li:before{content:'✓';color:var(--green);font-weight:900;margin-top:1px}
-.estimate{background:var(--navy);color:#fff;border-radius:20px;padding:30px;box-shadow:var(--shadow)}
-.estimate .etag{color:var(--blue2);font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
-.estimate h3{color:#fff;font-size:1.3rem;margin:6px 0 4px}
-.estimate .etype{color:#b7cbe4;font-size:.82rem;margin-bottom:18px}
-.escore{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px 18px;margin-bottom:16px}
-.escore strong{font-size:2.4rem;color:var(--blue2);line-height:1}
-.escore span{font-size:.78rem;color:#c9d8ea}
-.erow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.86rem}
-.erow span{color:#a9c0da}
-.erow b{color:#fff;font-weight:700}
-.echips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
-.echip{background:rgba(58,149,224,.16);border:1px solid rgba(58,149,224,.4);color:#dcecfb;border-radius:999px;padding:6px 11px;font-size:.7rem;font-weight:700}
-.enote{color:#8ea6c2;font-size:.68rem;margin-top:14px}
-
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 16px;text-align:center;box-shadow:var(--shadow-sm)}
-.stat strong{display:block;color:var(--blue);font-size:2rem;font-weight:900;letter-spacing:-.03em}
-.stat span{display:block;color:var(--muted);font-size:.78rem;font-weight:600;margin-top:6px}
-
-/* testimonials */
-.tg{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.tcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow-sm)}
-.tcard .st{color:#ffb703;letter-spacing:2px;margin-bottom:10px}
-.tcard p{font-size:.95rem;color:var(--ink)}
-.tcard .who{display:flex;align-items:center;gap:11px;margin-top:16px}
-.tcard .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(150deg,var(--blue2),var(--blue));color:#fff;display:grid;place-items:center;font-weight:800;font-size:.82rem}
-.tcard .who strong{display:block;font-size:.84rem;color:var(--navy)}
-.tcard .who span{font-size:.74rem;color:var(--muted)}
-
-/* faq */
-.faq{max-width:820px;margin:0 auto}
-.qa{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
-.qa summary{cursor:pointer;padding:18px 22px;font-weight:700;color:var(--navy);font-size:.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.qa summary::-webkit-details-marker{display:none}
-.qa summary:after{content:'+';color:var(--blue);font-weight:800;font-size:1.3rem}
-.qa[open] summary:after{content:'–'}
-.qa .a{padding:0 22px 20px;color:var(--muted);font-size:.89rem}
-
-/* embed report */
-.embed-band{background:var(--bg)}
-.embed-shell{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
-.embed-shell iframe{width:100%;min-height:1180px;border:0;display:block}
-.embed-fallback{padding:12px 18px;text-align:center;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
-/* branded preloader overlay */
-.ski-loader{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(180deg,#0a1f3c,#13314f 62%,#1c4468);color:#fff;transition:opacity .55s ease}
-.ski-loader.hide{opacity:0;pointer-events:none}
-.ski-loader .ll-logo{height:26px;margin-bottom:20px;opacity:.95}
-.ski-loader .ll-scene{width:200px;height:130px;position:relative}
-.ski-loader .ll-scene svg{width:100%;height:100%;display:block}
-.ski-loader .ll-sweep{transform-origin:100px 70px;animation:llsweep 2.8s linear infinite}
-@keyframes llsweep{to{transform:rotate(360deg)}}
-.ski-loader .ll-pulse{animation:llpulse 1.9s ease-out infinite}
-@keyframes llpulse{0%{r:5;opacity:.9}100%{r:24;opacity:0}}
-.ski-loader .ll-sf{animation:llfall linear infinite}
-@keyframes llfall{0%{transform:translateY(-8px);opacity:0}15%{opacity:1}100%{transform:translateY(120px);opacity:.1}}
-.ski-loader .ll-sf.a{animation-duration:3s}
-.ski-loader .ll-sf.b{animation-duration:2.3s;animation-delay:.5s}
-.ski-loader .ll-sf.c{animation-duration:3.4s;animation-delay:.9s}
-.ski-loader .ll-sf.d{animation-duration:2.7s;animation-delay:1.3s}
-.ski-loader h3{color:#fff;font-size:1.2rem;margin:16px 0 6px}
-.ski-loader .ll-status{color:#bcd3ea;font-size:.86rem;min-height:1.2em;transition:opacity .3s ease}
-.ski-loader .ll-bar{width:min(320px,78%);height:8px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden;margin:20px 0 14px}
-.ski-loader .ll-bar i{display:block;height:100%;width:8%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:999px;transition:width .45s ease}
-.ski-loader .ll-note{font-size:.72rem;color:#9fb6c8}
-.ski-loader .ll-note a{color:var(--blue2);font-weight:700;text-decoration:underline}
-@media(prefers-reduced-motion:reduce){.ski-loader .ll-sweep,.ski-loader .ll-pulse,.ski-loader .ll-sf{animation:none}}
-
-/* bottom cta */
-.final{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;text-align:center}
-.final .wrap{padding:66px 0}
-.final h2{color:#fff;font-size:clamp(1.8rem,3.6vw,2.5rem);margin-bottom:14px}
-.final p{color:#c3d6e6;margin-bottom:22px;max-width:620px;margin-left:auto;margin-right:auto}
-.final .consult{display:inline-block;margin-top:14px;color:var(--blue2);font-weight:700;font-size:.85rem;text-decoration:underline}
-
-/* footer */
-footer{background:#12203f;color:#8ea6c2;padding:30px 0;font-size:.8rem}
-footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
-footer img{height:24px;opacity:.9}
-footer a{color:#bcd2e4;font-weight:600}
-.disc{max-width:640px;line-height:1.5}
-
-@media(max-width:900px){
-  .hero-grid,.report-grid{grid-template-columns:1fr}
-  .p3,.steps,.g6,.stats,.tg{grid-template-columns:1fr}
-  .g6{gap:14px}
-}
-@media(max-width:520px){.stats{grid-template-columns:1fr 1fr}}
-
-/* image background cards */
-.pcard.hasbg,.feat.hasbg,.step.hasbg{position:relative;overflow:hidden;border:0;background-size:cover;background-position:bottom right;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px 24px;box-shadow:var(--shadow-sm)}
-/* readability overlay uses ::after so the step ::before number badge is preserved */
-.hasbg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,23,47,.72) 0%,rgba(9,23,47,.82) 100%);z-index:0}
-.hasbg>*{position:relative;z-index:1}
-.hasbg .i{display:none}
-.hasbg h4{color:#fff}
-.hasbg p{color:#e9f0f8;max-width:34ch;margin-left:auto;margin-right:auto}
-/* numbered 1/2/3 badge: top-center, fully inside the card, above image + overlay */
-.step.hasbg{padding-top:64px}
-.step.hasbg::before{top:16px;left:50%;transform:translateX(-50%);z-index:3}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smart 1 Ski Resort Growth & Weather Trigger Plan</title>
+  <style>
+    :root{--navy:#1A2E58;--blue:#1677c8;--ice:#eaf6ff;--green:#26a269;--text:#172033;--muted:#637083;--line:#dbe3ec;--white:#fff}
+    *{box-sizing:border-box} body{margin:0;background:#f4f7fb;color:var(--text);font-family:Montserrat,Arial,sans-serif}
+    .shell{max-width:980px;margin:auto;padding:22px}.hero{background:linear-gradient(135deg,var(--navy),#274a82);color:#fff;padding:30px;border-radius:18px 18px 0 0}
+    .hero h1{margin:0 0 8px;font-size:clamp(25px,4vw,42px)}.hero p{margin:0;max-width:760px;line-height:1.55}
+    .card{background:#fff;padding:26px;border-radius:0 0 18px 18px;box-shadow:0 18px 45px rgba(20,42,77,.12)}
+    .progress{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:25px}.step-dot{height:7px;background:#e3e8ef;border-radius:10px}.step-dot.on{background:var(--blue)}
+    .step{display:none}.step.active{display:block}.step h2{color:var(--navy);margin-top:0}.hint{color:var(--muted);font-size:14px;line-height:1.5}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.full{grid-column:1/-1}
+    label{font-size:13px;font-weight:700;color:var(--navy);display:block;margin-bottom:7px}
+    input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}textarea{min-height:92px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:3px solid rgba(22,119,200,.12);border-color:var(--blue)}
+    .actions{display:flex;justify-content:space-between;gap:12px;margin-top:24px}.btn{border:0;padding:13px 20px;border-radius:9px;font-weight:800;cursor:pointer}
+    .primary{background:var(--blue);color:#fff}.secondary{background:#e9eef5;color:var(--navy)}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .error{display:none;background:#fff1f1;border:1px solid #efb5b5;color:#8a1c1c;padding:12px;border-radius:9px;margin:15px 0}
+    .loading{display:none;text-align:center;padding:35px}.spinner{width:42px;height:42px;margin:0 auto 15px;border:5px solid #dce8f3;border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    #results{display:none}.score{display:flex;align-items:center;gap:18px;background:var(--ice);padding:18px;border-radius:12px;margin:18px 0}.score strong{font-size:42px;color:var(--blue)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{background:#f5f7fa;padding:14px;border-radius:10px}.metric b{display:block;font-size:20px;color:var(--navy)}.metric span{font-size:12px;color:var(--muted)}
+    .section{margin:26px 0}.section h3{color:var(--navy);border-bottom:2px solid var(--ice);padding-bottom:8px}
+    .trigger{border-left:4px solid var(--blue);padding:10px 13px;margin:10px 0;background:#f8fafc}.trigger b{color:var(--navy)}
+    .allocation{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.allocation div{padding:12px;background:#f5f7fa;border-radius:9px;text-align:center}.allocation b{display:block;color:var(--navy)}
+    .notice{font-size:12px;color:var(--muted);line-height:1.5}.print{float:right}
+    @media(max-width:720px){.grid,.metrics,.allocation{grid-template-columns:1fr}.shell{padding:0}.hero,.card{border-radius:0}.progress{gap:4px}.print{float:none;margin-bottom:10px}}
+    @media print{body{background:#fff}.hero,.card{box-shadow:none}.print,.restart{display:none!important}.shell{max-width:none;padding:0}}
+  </style>
 </head>
-<body id="top">
+<body>
+<div class="shell">
+  <header class="hero">
+    <h1>Ski Resort Growth & Weather Trigger Plan</h1>
+    <p>Build a directional feeder-market, geofencing, weather-trigger and media plan based on your resort, operating model and campaign goals.</p>
+  </header>
+  <main class="card">
+    <div id="formArea">
+      <div class="progress"><div class="step-dot on"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+      <div class="error" id="error"></div>
+      <form id="skiForm">
+        <section class="step active">
+          <h2>1. Resort Information</h2>
+          <div class="grid">
+            <div><label>Resort Name *</label><input name="resort_name" required></div>
+            <div><label>Website</label><input type="url" name="website" placeholder="https://"></div>
+            <div><label>Resort ZIP Code *</label><input name="zip_code" required inputmode="numeric" pattern="\d{5}(-\d{4})?" maxlength="10"></div>
+            <div><label>Typical Operating Months</label><input name="operating_months" value="November–March"></div>
+            <div><label>Ski Season Starts</label><select name="season_start_month"><option value="10">October</option><option value="11" selected>November</option><option value="12">December</option></select></div>
+            <div><label>Ski Season Ends</label><select name="season_end_month"><option value="2">February</option><option value="3" selected>March</option><option value="4">April</option><option value="5">May</option></select></div>
+            <div><label>Does the resort make snow?</label><select name="snowmaking"><option value="yes">Yes</option><option value="limited">Limited</option><option value="no">No</option></select></div>
+            <div><label>Primary Resort Type</label><select name="resort_type"><option>Day-trip ski area</option><option>Destination mountain resort</option><option>Family ski and tubing area</option><option>Luxury resort</option><option>Community/nonprofit ski area</option></select></div>
+            <div class="full"><label>Main Revenue Products</label><textarea name="revenue_products" placeholder="Lift tickets, season passes, lodging, lessons, rentals, food and beverage, tubing, events..."></textarea></div>
+          </div>
+        </section>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="wrap">
-    <a class="logo" href="#top"><img src="https://content.app-sources.com/s/30680510049142132/uploads/Our_Products_/logo-final-cmyk-hz1line-white-9562849.png?format=webp" alt="Smart 1 Marketing"></a>
-    <div class="nav-links">
-      <a href="#how">How It Works</a>
-      <a href="#included">What You Get</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://smart1marketing.com/free-consultation">Contact Us</a>
-      <a class="btn btn-cta" href="#get-report">Get My Free Report</a>
-    </div>
-  </div>
-</nav>
+        <section class="step">
+          <h2>2. Feeder Markets & Audience</h2>
+          <p class="hint">Enter known figures where available. Blank population fields will use a directional estimate based on the number of markets entered.</p>
+          <div class="grid">
+            <div class="full"><label>Primary Feeder Markets *</label><textarea name="target_markets" required placeholder="Columbus, Cincinnati, Cleveland, Detroit, Pittsburgh"></textarea></div>
+            <div><label>Estimated Combined Population</label><input type="number" min="0" name="feeder_population" placeholder="Optional"></div>
+            <div><label>Estimated Combined Households</label><input type="number" min="0" name="feeder_households" placeholder="Optional"></div>
+            <div><label>Affluent Share Assumption (%)</label><input type="number" min="5" max="90" name="affluent_share" value="35"></div>
+            <div><label>Skiing Household Rate Assumption (%)</label><input type="number" min="2" max="30" step=".1" name="ski_household_rate" value="9"></div>
+            <div><label>Persons Per Household</label><input type="number" min="1.5" max="4.5" step=".01" name="persons_per_household" value="2.45"></div>
+            <div><label>Drive-Market Relevance (%)</label><input type="number" min="20" max="100" name="drive_market_share" value="75"></div>
+            <div><label>Typical Guest Drive Time</label><select name="drive_time"><option>Under 90 minutes</option><option>1.5–3 hours</option><option>3–5 hours</option><option>5+ hours / fly market</option></select></div>
+            <div class="full"><label>Named Competitors or Nearby Resorts</label><textarea name="competitors" placeholder="One per line or separated by commas"></textarea></div>
+          </div>
+        </section>
 
-<!-- HERO -->
-<header class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <div class="eyebrow">Weather-Triggered Ski Marketing</div>
-        <h1>Fill More Lift Lines <span class="u">When the Weather Is Right.</span></h1>
-        <p class="hero-sub">Smart 1's weather-triggered advertising puts your resort in front of in-market skiing households exactly when fresh snow, cold snaps, and bluebird weekends drive them to book lift tickets, passes, and lodging.</p>
-        <div class="hero-cta-row">
-          <a class="btn btn-cta btn-lg" href="#get-report">Get My Free Ski Demand Report →</a>
-          <a class="btn btn-ghost btn-lg" href="#how">See how it works</a>
+        <section class="step">
+          <h2>3. Campaign Goals & Budget</h2>
+          <div class="grid">
+            <div><label>Primary Objective</label><select name="campaign_objective"><option value="season_passes">Season Pass Sales</option><option value="lift_tickets" selected>Lift Tickets & Weekend Visits</option><option value="lodging">Lodging & Destination Packages</option><option value="local_visits">Local Day Trips / Tubing</option></select></div>
+            <div><label>Recommended Monthly Media Range</label><select name="monthly_budget"><option value="3500">$2,500–$4,500</option><option value="6000" selected>$4,500–$7,500</option><option value="10000">$7,500–$12,500</option><option value="17500">$12,500–$25,000</option><option value="30000">$25,000+</option></select></div>
+            <div><label>Primary Booking Window</label><select name="booking_window"><option>Same day–3 days</option><option selected>3–14 days</option><option>2–6 weeks</option><option>Seasonal / advance purchase</option></select></div>
+            <div><label>Current Paid Media</label><input name="current_media" placeholder="CTV, programmatic display, digital audio, radio..."></div>
+            <div><label>Minimum Weekly Activation Level (%)</label><input type="number" min="15" max="80" name="minimum_activation_share" value="35"></div>
+            <div class="full"><label>Key Offers or Operational Constraints</label><textarea name="offers_constraints" placeholder="Dynamic pricing, blackout dates, lodging capacity, lift limits, beginner focus, special events..."></textarea></div>
+            <div class="full"><label>Exclusions, Negative Keywords or Other Notes</label><textarea name="exclusions"></textarea></div>
+          </div>
+        </section>
+
+        <section class="step">
+          <h2>4. Contact Information</h2>
+          <div class="grid">
+            <div><label>Contact Name *</label><input name="contact_name" required></div>
+            <div><label>Work Email *</label><input type="email" name="contact_email" required></div>
+            <div><label>Phone</label><input type="tel" name="contact_phone"></div>
+            <div><label>Role</label><input name="contact_role" placeholder="General Manager, Marketing Director..."></div>
+            <div class="full"><label><input type="checkbox" required style="width:auto;margin-right:8px"> I understand this is a directional marketing estimate and not a snow, weather or revenue guarantee.</label></div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="btn secondary" id="back" style="visibility:hidden">Back</button>
+          <button type="button" class="btn primary" id="next">Next</button>
+          <button type="submit" class="btn primary" id="submit" style="display:none">Generate Plan</button>
         </div>
-        <div class="hero-micro"><span>Free &amp; instant</span><span>~1 minute</span><span>No sales call</span></div>
-      </div>
-      <div class="mini">
-        <span class="tag">Free Weather-Triggered Ski Demand Report</span>
-        <h3>See your season opportunity</h3>
-        <ul>
-          <li>A custom market report for your resort in about a minute</li>
-          <li>See your targeted skiing-household reach, plan &amp; budget</li>
-          <li>No cost, no obligation — download the plan instantly</li>
-        </ul>
-        <a class="btn btn-cta" href="#get-report">Build My Report →</a>
-      </div>
+      </form>
     </div>
-  </div>
-</header>
 
-<!-- EMBEDDED REPORT TOOL (high on page to convert) -->
-<section class="embed-band" id="get-report" style="padding:44px 0 60px">
-  <div class="wrap">
-    <div class="sec-head" style="margin-bottom:26px">
-      <div class="eyebrow">Get Your Free Report</div>
-      <h2>Build your Ski Demand Report</h2>
-      <p>Enter your resort details and your custom weather-triggered plan generates instantly — free, in about a minute.</p>
-    </div>
-    <div class="embed-shell">
-      <div class="ski-loader" id="skiLoader">
-        <img class="ll-logo" src="https://content.app-sources.com/s/30680510049142132/uploads/Our_Products_/logo-final-cmyk-hz1line-white-9562849.png?format=webp" alt="Smart 1 Marketing">
-        <div class="ll-scene">
-          <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="swg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#5bc0eb" stop-opacity=".55"/>
-                <stop offset="1" stop-color="#5bc0eb" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <g class="ll-sweep"><path d="M100 70 L100 -12 A82 82 0 0 1 168 22 Z" fill="url(#swg)"/></g>
-            <path d="M0 118 L46 58 L78 92 L116 44 L150 86 L200 40 L200 130 L0 130 Z" fill="#16324f"/>
-            <path d="M0 130 L38 84 L74 112 L112 78 L150 108 L200 74 L200 130 Z" fill="#22496f"/>
-            <circle class="ll-pulse" cx="116" cy="44" r="5" fill="none" stroke="#ff6b3d" stroke-width="2"/>
-            <circle cx="116" cy="44" r="5" fill="#ff6b3d"/>
-            <circle class="ll-sf a" cx="30" cy="10" r="2" fill="#cfe6f4"/>
-            <circle class="ll-sf b" cx="90" cy="6" r="1.6" fill="#cfe6f4"/>
-            <circle class="ll-sf c" cx="150" cy="12" r="2.2" fill="#cfe6f4"/>
-            <circle class="ll-sf d" cx="120" cy="4" r="1.5" fill="#cfe6f4"/>
-          </svg>
-        </div>
-        <h3>Building your ski market…</h3>
-        <div class="ll-status" id="llStatus">Waking up the market engine…</div>
-        <div class="ll-bar"><i id="llBar"></i></div>
-        <div class="ll-note">Trouble loading? <a href="https://smart1ski.onrender.com/" target="_blank" rel="noopener">Open in a new tab →</a></div>
-      </div>
-      <iframe id="reportFrame" data-src="https://smart1ski.onrender.com/" title="Smart 1 Ski Demand Report" scrolling="auto"></iframe>
-      <div class="embed-fallback">Trouble loading the form? <a href="https://smart1ski.onrender.com/" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">Open it in a new tab →</a></div>
-    </div>
-  </div>
-</section>
-
-<!-- PROBLEM -->
-<section class="pad">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">The Problem</div>
-      <h2>The weather decides who's skiing. Are your ads paying attention?</h2>
-    </div>
-    <div class="p3">
-      <div class="pcard hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741898/You_spend_when_it_s_quiet.png')"><div class="i">💸</div><h4>You spend when it's quiet</h4><p>Flat ad schedules burn budget on warm, rainy, no-snow days and go dark right when powder and cold snaps bring skiers out.</p></div>
-      <div class="pcard hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741898/You_miss_peak_snow_moments.png')"><div class="i">🌨️</div><h4>You miss peak snow moments</h4><p>Fresh snowfall, bluebird weekends, and holiday forecasts create urgent lift-ticket and lodging demand — but only if you show up first.</p></div>
-      <div class="pcard hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741900/You_re_not_reaching_skiers.png')"><div class="i">🎯</div><h4>You're not reaching skiers</h4><p>Without feeder-market data and in-market targeting, your ads reach everyone but the households ready to book a ski trip.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="pad tint" id="how">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">How It Works</div>
-      <h2>Your weather-triggered demand engine in 3 steps</h2>
-    </div>
-    <div class="steps">
-      <div class="step hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741904/Tell_us_your_market_2.png')"><h4>Tell us your market</h4><p>Enter your resort, ZIP, and feeder markets. That's the start — no long form, no sales call required.</p></div>
-      <div class="step hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741897/Get_your_custom_report_2.png')"><h4>Get your custom report</h4><p>Instantly see your Weather-Marketing Readiness Score, targeted skiing households, weather triggers, media plan, and a week-by-week season plan.</p></div>
-      <div class="step hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741904/Turn_weather_into_visits.png')"><h4>Turn weather into visits</h4><p>We launch weather-triggered ads to skiing households — so you sell more tickets, passes, and lodging on the days that matter.</p></div>
-    </div>
-    <div style="text-align:center;margin-top:34px"><a class="btn btn-cta btn-lg" href="#get-report">Get My Free Report →</a></div>
-  </div>
-</section>
-
-<!-- WHAT YOU GET -->
-<section class="pad" id="included">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">What You Get</div>
-      <h2>A complete weather-triggered advertising system</h2>
-      <p>Every campaign is built on skiing-household data and activated by the weather moments that drive demand in your market.</p>
-    </div>
-    <div class="g6">
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741903/Weather-triggered_activation.png')"><div class="i">🌡️</div><h4>Weather-triggered activation</h4><p>Ads turn on for your conditions — powder days, cold &amp; snowmaking windows, bluebird weekends, holiday forecasts — and pause on rain, warm, or high-wind days.</p></div>
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741901/In-market_skiing_household_data.png')"><div class="i">🎿</div><h4>In-market skiing household data</h4><p>Reach targeted skiing households, layered with competitor-resort, ski-shop, and travel-corridor geotargeting and location look-back.</p></div>
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784741901/Premium_channels.png')"><div class="i">📺</div><h4>Premium channels</h4><p>Connected TV, streaming radio &amp; podcasts, data-driven display, and digital out-of-home — plus streaming audio geotargeted across your feeder markets.</p></div>
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784743992/Seasonal_budget_that_flexes.png')"><div class="i">📅</div><h4>Seasonal budget that flexes</h4><p>Spend rises in strong snow windows and steps down in weak-weather weeks, so you never waste budget on no-snow days.</p></div>
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784743991/Historical_savings_model.png')"><div class="i">🛡️</div><h4>Historical savings model</h4><p>See how much budget could be protected by shifting spend out of historically weak weather windows into your strongest snow weeks.</p></div>
-      <div class="feat hasbg" style="background-image:url('https://res.cloudinary.com/smart1labs/image/upload/v1784743989/Full-funnel_coverage_2.png')"><div class="i">📈</div><h4>Full-funnel coverage</h4><p>Lift tickets, season passes, lodging, lessons, rentals, food &amp; beverage, tubing, and events — all in one plan.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- YOUR FREE REPORT + SAMPLE ESTIMATE -->
-<section class="pad tint">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Your Free Report</div>
-      <h2>See your opportunity before you spend a dollar</h2>
-      <p>In about a minute, your custom Ski Demand Report shows exactly where the opportunity is in your market — and the plan to capture it.</p>
-    </div>
-    <div class="report-grid">
-      <div>
-        <h3 style="font-size:1.15rem">Your report includes</h3>
-        <ul class="rlist">
-          <li>Your resort's Weather-Marketing Readiness Score</li>
-          <li>Estimated feeder, broad-skiing &amp; targeted skiing households</li>
-          <li>A historical weather-based savings model (budget protected %)</li>
-          <li>A week-by-week historical season plan with activation scores</li>
-          <li>Your weather-trigger playbook, geofencing targets &amp; a downloadable PDF</li>
-        </ul>
-        <div style="margin-top:22px"><a class="btn btn-cta btn-lg" href="#get-report">Build My Report →</a></div>
-      </div>
-      <div class="estimate">
-        <div class="etag">Your Smart Ski Demand Market Estimate</div>
-        <h3>Sample Resort</h3>
-        <div class="etype">Northern / Seasonal Ski Market</div>
-        <div class="escore"><strong>78</strong><span>Weather-Marketing Readiness Score<br>Directional planning score from historical cold, snow, bluebird, rain &amp; wind patterns.</span></div>
-        <div class="erow"><span>Feeder households</span><b>620k–840k</b></div>
-        <div class="erow"><span>Broad skiing households</span><b>44k–61k</b></div>
-        <div class="erow"><span>Targeted skiing households</span><b>9k–15k</b></div>
-        <div class="erow"><span>Recommended media</span><b>$6,000/mo</b></div>
-        <div class="erow"><span>Budget protected (weak weeks)</span><b>~38%</b></div>
-        <div class="echips"><span class="echip">In-Market Skiing HHs</span><span class="echip">Connected TV</span><span class="echip">Digital Audio</span><span class="echip">Programmatic Display</span><span class="echip">Geo Look-Back</span></div>
-        <p class="enote">Illustrative sample — your report calculates the real numbers for your resort.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY IT WORKS -->
-<section class="pad">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Why Weather-Triggered Works</div>
-      <h2>Show up when demand is real</h2>
-    </div>
-    <div class="stats">
-      <div class="stat"><strong>3×</strong><span>higher engagement on trigger days</span></div>
-      <div class="stat"><strong>~38%</strong><span>budget protected in weak-weather weeks</span></div>
-      <div class="stat"><strong>~1 min</strong><span>to a custom market report</span></div>
-      <div class="stat"><strong>100%</strong><span>full-funnel: tickets, passes &amp; lodging</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="pad tint">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">What Resorts Say</div>
-      <h2>Built for ski resorts</h2>
-    </div>
-    <div class="tg">
-      <div class="tcard"><div class="st">★★★★★</div><p>"The feeder-market breakdown finally put our ad dollars where the skiers actually were. Bookings jumped after the first cold snap."</p><div class="who"><div class="av">MD</div><div><strong>Marketing Director</strong><span>Wisconsin Ski Resort</span></div></div></div>
-      <div class="tcard"><div class="st">★★★★★</div><p>"I saw my whole market opportunity in under a minute. The week-by-week plan made it easy to say yes."</p><div class="who"><div class="av">OW</div><div><strong>Owner</strong><span>Michigan Ski Resort</span></div></div></div>
-    </div>
-    <p style="text-align:center;color:var(--muted);font-size:.72rem;margin-top:18px">Representative examples for illustration.</p>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="pad" id="faq">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Frequently Asked</div>
-      <h2>Everything you're probably wondering</h2>
-    </div>
-    <div class="faq">
-      <details class="qa" open><summary>Is the report really free?</summary><div class="a">Yes. Your Ski Demand Report is completely free with no obligation. You'll see your Weather-Marketing Readiness Score, targeted skiing households, recommended plan and budget, and you can download the plan as a PDF.</div></details>
-      <details class="qa"><summary>How does weather-triggered advertising work?</summary><div class="a">We identify the weather moments that drive ski demand in your market — powder days, cold &amp; snowmaking windows, bluebird weekends, holiday forecasts — and activate your ads to skiing households exactly when those conditions hit, pausing on rain, warm, or high-wind days.</div></details>
-      <details class="qa"><summary>Who will actually see my ads?</summary><div class="a">Targeted skiing households in your feeder markets, layered with competitor-resort, ski-shop &amp; travel-corridor geotargeting and location look-back, across Connected TV, streaming radio, podcasts, data-driven display, and digital out-of-home.</div></details>
-      <details class="qa"><summary>How is my budget spent?</summary><div class="a">Your plan concentrates spend in historically strong snow windows and steps it down in weak-weather weeks — and the report shows how much budget that could protect. Delivery estimates use planning assumptions and vary by market, inventory, and dates.</div></details>
-      <details class="qa"><summary>How fast can we launch?</summary><div class="a">Most resorts can launch within days. Start with the free report, and a Smart 1 strategist can review it and build your campaign from there.</div></details>
-    </div>
-  </div>
-</section>
-
-<!-- BOTTOM CTA -->
-<section class="final">
-  <div class="wrap">
-    <div class="eyebrow" style="color:var(--blue2)">Ready when you are</div>
-    <h2>See your ski market before the first snow.</h2>
-    <p>Free, instant, and built for your resort. The sooner you have your plan, the sooner you're ready for opening day.</p>
-    <a class="btn btn-cta btn-lg" href="#get-report">Get My Free Ski Demand Report →</a>
-    <div><a class="consult" href="https://smart1marketing.com/free-consultation">Prefer to talk first? Book a free consultation →</a></div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="wrap">
-    <img src="https://content.app-sources.com/s/30680510049142132/uploads/Our_Products_/logo-final-cmyk-hz1line-white-9562849.png?format=webp" alt="Smart 1 Marketing">
-    <p class="disc">Skiing-household, snowfall, weather, and location figures are planning estimates based on geography, historical climate, and standard assumptions — not audited counts. © Smart 1 Marketing.</p>
-    <div><a href="#get-report">Get My Free Report</a> &nbsp;·&nbsp; <a href="https://smart1marketing.com/free-consultation">Contact Us</a></div>
-  </div>
-</footer>
-
+    <div class="loading" id="loading"><div class="spinner"></div><h2>Building the ski resort plan…</h2><p class="hint">Analyzing the resort location, historical winter conditions, feeder markets and media allocation.</p></div>
+    <div id="results"></div>
+  </main>
+</div>
 <script>
-/* Ski report tool: background pre-warm + branded loader + reveal.
-   Hides Render free-tier cold-start behind an on-brand overlay. */
-(function(){
-  var frame=document.getElementById('reportFrame');
-  var loader=document.getElementById('skiLoader');
-  if(!frame||!loader) return;
-  var bar=document.getElementById('llBar');
-  var statusEl=document.getElementById('llStatus');
-  var steps=['Waking up the market engine…','Mapping your feeder markets…','Analyzing historical snow & weather…','Sizing your skiing households…','Ranking your geofence targets…','Building your weather plan…','Almost ready…'];
-  var si=0, revealed=false, warmStarted=false, start=Date.now();
-  var MIN_SHOW=1400, QUIET=4000, HARDCAP=45000, quietT=null;
+const form=document.getElementById("skiForm"),steps=[...document.querySelectorAll(".step")],dots=[...document.querySelectorAll(".step-dot")];
+const next=document.getElementById("next"),back=document.getElementById("back"),submit=document.getElementById("submit"),errorBox=document.getElementById("error");
+let current=0;
+const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n||0);
+const number=n=>n==null?"Unavailable":new Intl.NumberFormat("en-US").format(n);
+function showStep(i){current=i;steps.forEach((s,x)=>s.classList.toggle("active",x===i));dots.forEach((d,x)=>d.classList.toggle("on",x<=i));back.style.visibility=i?"visible":"hidden";next.style.display=i===steps.length-1?"none":"inline-block";submit.style.display=i===steps.length-1?"inline-block":"none";errorBox.style.display="none";}
+function validStep(){const required=[...steps[current].querySelectorAll("[required]")];for(const el of required){if(!el.checkValidity()){el.reportValidity();return false}}return true}
+next.onclick=()=>{if(validStep())showStep(current+1)};back.onclick=()=>showStep(current-1);
+form.addEventListener("submit",async e=>{
+ e.preventDefault(); if(!validStep())return;
+ document.getElementById("formArea").style.display="none";document.getElementById("loading").style.display="block";
+ const payload=Object.fromEntries(new FormData(form).entries());
+ try{
+  const response=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  const data=await response.json();
+  if(!response.ok)throw new Error(data.details||data.error||"Request failed");
+  render(data.report,data.webhook);
+ }catch(err){
+  document.getElementById("loading").style.display="none";document.getElementById("formArea").style.display="block";
+  errorBox.textContent=err.message;errorBox.style.display="block";
+ }
+});
+function render(r,webhook){
+ const c=r.climate,a=r.audience,b=r.budget_plan,s=r.savings_model,w=r.historical_weekly_plan||[];
+ const metric=(v,label)=>`<div class="metric"><b>${v}</b><span>${label}</span></div>`;
+ const weekRows=w.map(x=>`<tr>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">Week ${x.week_number}</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.avg_qualified_ad_days}</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.avg_snowfall_inches}"</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.avg_snowmaking_days}</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.avg_suppressed_days}</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.activation_confidence}%</td>
+   <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.recommendation}</td>
+ </tr>`).join("");
 
-  function warm(){ if(warmStarted) return; warmStarted=true; frame.src=frame.getAttribute('data-src'); }
+ document.getElementById("loading").style.display="none";
+ const el=document.getElementById("results");el.style.display="block";
+ el.innerHTML=`
+ <button class="btn secondary print" onclick="window.print()">Print / Save PDF</button>
+ <h2>${r.resort.name}: Ski Resort Marketing Plan</h2>
+ <p class="hint">${r.resort.location} · ZIP ${r.resort.zip_code} · Approx. elevation ${number(r.resort.elevation_feet_estimate)} ft</p>
 
-  var sTimer=setInterval(function(){ si=(si+1)%steps.length; statusEl.style.opacity=0; setTimeout(function(){ statusEl.textContent=steps[si]; statusEl.style.opacity=1; },250); },2300);
-  var p=8, pTimer=setInterval(function(){ if(p<93){ p+=Math.max(.4,(93-p)*0.028); bar.style.width=p+'%'; } },320);
+ <div class="score"><strong>${r.weather_marketing_readiness_score}</strong><div><b>Weather-Marketing Readiness Score</b><br><span class="hint">A directional planning score based on historical cold, snowfall, bluebird, rain and wind patterns.</span></div></div>
 
-  function reveal(){ if(revealed) return; revealed=true; clearInterval(sTimer); clearInterval(pTimer); clearTimeout(quietT);
-    var wait=Math.max(0, MIN_SHOW-(Date.now()-start));
-    setTimeout(function(){ bar.style.width='100%'; statusEl.textContent='Ready!';
-      setTimeout(function(){ loader.classList.add('hide'); setTimeout(function(){ loader.style.display='none'; },600); },260);
-    }, wait);
-  }
+ <section class="section"><h3>Estimated Targeted Skiing Households</h3>
+  <div class="metrics">
+   ${metric(number(a.feeder_households_used),"Feeder households used")}
+   ${metric(number(a.broad_skiing_households),"Broad skiing households")}
+   ${metric(number(a.estimated_targeted_skiing_households),"Estimated targeted skiing households")}
+   ${metric(number(a.estimated_targeted_skiers_and_riders),"Estimated skiers and riders")}
+  </div>
+  <p class="notice">${a.methodology_note}</p>
+ </section>
 
-  /* 1) exact reveal if the tool posts a ready ping */
-  window.addEventListener('message', function(e){ if(e && e.data==='app-ready') reveal(); });
-  /* 2) fallback: reveal once the iframe has finished + gone quiet */
-  frame.addEventListener('load', function(){ if(!frame.getAttribute('src')) return; clearTimeout(quietT); quietT=setTimeout(reveal, QUIET); });
-  /* 3) safety net */
-  setTimeout(reveal, HARDCAP);
+ <section class="section"><h3>Historical Weather-Based Savings Model</h3>
+  <div class="metrics">
+   ${metric(money(s.always_on_season_spend),"Modeled always-on season spend")}
+   ${metric(money(s.modeled_trigger_controlled_spend),"Modeled trigger-controlled spend")}
+   ${metric(money(s.estimated_budget_protected),"Estimated budget protected")}
+   ${metric(s.estimated_budget_protected_percent+"%","Estimated protection rate")}
+  </div>
+  <p><b>How this could save money:</b> Instead of spending evenly during every week of the ski season, the campaign increases activity during historically strong snowmaking, powder and bluebird windows and reduces acquisition spending during warm, rainy or high-wind periods. This model identified <b>${s.historically_strong_activation_weeks}</b> historically strong weeks and <b>${s.historically_weak_or_suppressed_weeks}</b> weaker or suppressed weeks.</p>
+  <p class="notice">${s.methodology_note}</p>
+ </section>
 
-  /* pre-warm: start waking Render early (on load, near-scroll, and CTA hover) */
-  [].forEach.call(document.querySelectorAll('a[href="#get-report"]'), function(a){ a.addEventListener('pointerover', warm); a.addEventListener('click', warm); });
-  try{ if('IntersectionObserver' in window){ new IntersectionObserver(function(en,io){ if(en[0].isIntersecting){ warm(); io.disconnect(); } },{rootMargin:'700px'}).observe(loader.parentNode); } }catch(e){}
-  warm();
-})();
+ <section class="section"><h3>Week-by-Week Historical Ski Season Plan</h3>
+  <div style="overflow-x:auto">
+   <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead><tr style="background:#eef5fb">
+     <th style="padding:9px;text-align:left">Season Week</th>
+     <th style="padding:9px;text-align:left">Qualified Ad Days</th>
+     <th style="padding:9px;text-align:left">Snowfall</th>
+     <th style="padding:9px;text-align:left">Snowmaking Days</th>
+     <th style="padding:9px;text-align:left">Suppressed Days</th>
+     <th style="padding:9px;text-align:left">Activation Score</th>
+     <th style="padding:9px;text-align:left">AI Recommendation</th>
+    </tr></thead>
+    <tbody>${weekRows}</tbody>
+   </table>
+  </div>
+  <p class="notice">Each row averages the same numbered week across the historical seasons analyzed. Live activation should also use current forecasts, snow reports, lift status, road conditions and inventory.</p>
+ </section>
+
+ <div class="metrics">
+  ${metric(number(c.avg_snowmaking_days),"Avg. snowmaking-condition days")}
+  ${metric(number(c.avg_powder_days),"Avg. 4+ inch powder days")}
+  ${metric(number(c.avg_bluebird_days),"Avg. post-snow bluebird days")}
+  ${metric(number(c.avg_natural_snowfall_inches),"Avg. natural snowfall inches")}
+ </div>
+
+ <section class="section"><h3>Recommended Geofencing & Target Sources</h3>
+  <ul>${r.recommended_targets.geofence_categories.map(x=>`<li>${x}</li>`).join("")}</ul>
+  ${r.recommended_targets.named_competitors.length?`<p><b>Named competitors:</b> ${r.recommended_targets.named_competitors.join(", ")}</p>`:""}
+  <p class="hint">${r.recommended_targets.lookback_recommendation}</p>
+ </section>
+
+ <section class="section"><h3>Weather Trigger Playbook</h3>
+  ${r.trigger_plan.map(t=>`<div class="trigger"><b>${t.name}</b> — ${t.condition}<br><span class="hint">${t.action}</span></div>`).join("")}
+ </section>
+
+ <section class="section"><h3>Recommended Monthly Media Plan: ${money(b.budget)}</h3>
+  <div class="allocation" style="grid-template-columns:repeat(3,1fr)">
+   <div><b>${money(b.allocation.ctv)}</b>Connected TV</div>
+   <div><b>${money(b.allocation.display)}</b>Programmatic Display</div>
+   <div><b>${money(b.allocation.audio)}</b>Digital Audio</div>
+  </div>
+  <p class="hint">Estimated monthly delivery: ${number(b.impressions.ctv)} CTV impressions, ${number(b.impressions.display)} display impressions, and ${number(b.impressions.audio)} digital audio impressions.</p>
+  <div class="trigger"><b>Connected TV</b><br><span class="hint">Awareness and urgency among targeted skiing households during powder, cold, opening, and bluebird windows.</span></div>
+  <div class="trigger"><b>Programmatic Display</b><br><span class="hint">High-frequency lift-ticket, lodging, snow-condition, event, and retargeting messaging across premium websites and apps.</span></div>
+  <div class="trigger"><b>Digital Audio</b><br><span class="hint">Localized audio messages for commuters, travelers, and outdoor audiences, supported by clickable companion banners.</span></div>
+  <p class="notice">${b.note}</p>
+ </section>
+
+ <section class="section"><h3>Seasonal Campaign Structure</h3>
+  ${r.campaign_phases.map(p=>`<div class="trigger"><b>${p.phase}</b> (${p.timing})<br><span class="hint">${p.focus}</span></div>`).join("")}
+ </section>
+
+ <p class="notice">${r.disclaimer}</p>
+ <p class="notice">Smart 1 Suite delivery: ${webhook.configured?(webhook.delivered?"successful":"not delivered"):"webhook not configured on Render"}.</p>
+ <button class="btn secondary restart" onclick="location.reload()">Start Another Plan</button>`;
+}
 </script>
 </body>
 </html>
