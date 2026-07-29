@@ -1,16 +1,14 @@
 services:
   - type: web
     name: smart1ski
-    runtime: node
+    runtime: python
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 300
     healthCheckPath: /health
     envVars:
-      - key: NODE_VERSION
-        value: 20
-      - key: ALLOWED_ORIGIN
-        value: "*"
+      - key: PYTHON_VERSION
+        value: 3.12.4
       - key: GHL_WEBHOOK_URL
         sync: false
       - key: CLOUDINARY_URL
