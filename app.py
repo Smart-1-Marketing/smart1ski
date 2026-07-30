@@ -207,13 +207,46 @@ def climate_summary(latitude, longitude, season_start_month=11, season_end_month
 # ---------------------------------------------------------------------------
 # audience / budget / savings / triggers / targets
 # ---------------------------------------------------------------------------
-def estimate_audience(body):
+def _provided(body, *keys):
+    for k in keys:
+        v = str(body.get(k, "") or "").strip()
+        if v:
+            return v
+    return ""
+
+
+def estimate_audience(body, climate=None):
+    climate = climate or {}
     population = num(body.get("feeder_population"))
     households_entered = num(body.get("feeder_households"))
-    persons_per_household = clamp(num(body.get("persons_per_household"), 2.45), 1.5, 4.5)
-    affluent_share = clamp(num(body.get("affluent_share"), 35), 5, 90) / 100
-    ski_household_rate = clamp(num(body.get("ski_household_rate", body.get("ski_participation_rate", 9)), 9), 2, 30) / 100
-    drive_share = clamp(num(body.get("drive_market_share"), 75), 20, 100) / 100
+
+    pph_raw = _provided(body, "persons_per_household")
+    persons_per_household = clamp(num(pph_raw, 2.45), 1.5, 4.5)
+
+    # Skiing-household rate: use an override if given, otherwise DERIVE it from the
+    # resort's historical snow/snowmaking (snowier markets index higher for skiing).
+    rate_raw = _provided(body, "ski_household_rate", "ski_participation_rate")
+    if rate_raw:
+        ski_household_rate = clamp(num(rate_raw, 11), 2, 30) / 100
+    else:
+        snow = num(climate.get("avg_natural_snowfall_inches"))
+        smk = num(climate.get("avg_snowmaking_days"))
+        ski_household_rate = clamp(11 + snow / 30 + smk / 40, 9, 18) / 100
+
+    # Drive-market relevance: override if given, otherwise infer from drive time.
+    drive_raw = _provided(body, "drive_market_share")
+    if drive_raw:
+        drive_share = clamp(num(drive_raw, 75), 20, 100) / 100
+    else:
+        dt = str(body.get("drive_time", "")).lower()
+        if "under 90" in dt or "90" in dt:
+            drive_share = 0.88
+        elif "5+" in dt or "fly" in dt:
+            drive_share = 0.42
+        elif "3–5" in dt or "3-5" in dt:
+            drive_share = 0.58
+        else:
+            drive_share = 0.75
 
     households = households_entered or (population / persons_per_household if population else 0)
     if not households:
@@ -222,7 +255,8 @@ def estimate_audience(body):
 
     population_used = population or households * persons_per_household
     broad = rnd(households * ski_household_rate)
-    qualified = rnd(households * affluent_share * ski_household_rate * drive_share)
+    # Targeted skiing households: skiing households that are within drive relevance.
+    qualified = rnd(households * ski_household_rate * drive_share)
     past_visitor = rnd(qualified * 0.35)
     family = rnd(qualified * 0.42)
     individuals = rnd(qualified * 2.1)
@@ -235,7 +269,8 @@ def estimate_audience(body):
         "estimated_targeted_skiers_and_riders": individuals,
         "estimated_past_resort_visitor_households": past_visitor,
         "estimated_family_ski_households": family,
-        "methodology_note": "Directional household estimate based on feeder-market households, affluence, skiing-household participation, and drive-market relevance. It is not a purchased audience count.",
+        "skiing_household_rate_used_percent": round(ski_household_rate * 100, 1),
+        "methodology_note": "Directional estimate: feeder-market households in your selected markets, a skiing-household rate derived from your market's historical snow conditions, and drive-market relevance. It is not a purchased audience count.",
     }
 
 
@@ -328,7 +363,7 @@ def target_locations(body):
 
 
 def build_report(body, location, climate):
-    audience = estimate_audience(body)
+    audience = estimate_audience(body, climate)
     budget = budget_plan(body)
     savings = savings_model(body, climate, budget)
     trigger_plan = triggers(climate, body)
