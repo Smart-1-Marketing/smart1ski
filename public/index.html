@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ski Resort Growth and Weather Trigger Plan — Smart 1 Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="masthead no-print">
+  <div class="masthead-inner">
+    <div class="brand">Smart 1 Marketing</div>
+    <h1>Ski Resort Growth &amp; Weather Trigger Plan</h1>
+    <p>Seven short sections. You'll get a resort-specific read on which weeks of your season are worth spending on, how many skiing households each feeder market actually puts within reach, what the next sixteen days would trigger, and how much budget weather triggers could protect.</p>
+  </div>
+</header>
+
+<main class="shell">
+
+  <form class="card intake no-print" id="intake" novalidate>
+    <nav class="rail" id="rail" aria-label="Progress"></nav>
+
+    <div id="formError" class="banner banner-error" style="display:none;margin:16px 26px 0"></div>
+
+    <!-- Not a real field. Off-screen for people, visible to scripted bots.
+         The name is deliberately meaningless: anything that looks like a real
+         field ("company_website", "phone", "url") gets autofilled by Chrome and
+         every password manager, which rejects real prospects. -->
+    <div class="trap" aria-hidden="true">
+      <input id="s1_qx7" name="s1_qx7" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <!-- Elapsed milliseconds since the page loaded. Not a wall-clock timestamp:
+         a browser clock a few minutes fast would otherwise reject every human. -->
+    <input type="hidden" name="form_elapsed_ms" id="form_elapsed_ms">
+
+    <!-- 1 -->
+    <fieldset class="step" data-step="1" data-label="Resort">
+      <div class="step-eyebrow">Section 1 of 7</div>
+      <h2>The resort</h2>
+      <p class="step-note">The ZIP code anchors every weather calculation. Elevation is what makes it right.</p>
+
+      <div class="field">
+        <label for="resort_name">Resort name <span class="hint">Required</span></label>
+        <input id="resort_name" name="resort_name" required autocomplete="organization">
+        <div class="field-error">Enter the resort name.</div>
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label for="zip_code">Resort ZIP code <span class="hint">Required</span></label>
+          <input id="zip_code" name="zip_code" inputmode="numeric" placeholder="43215" required>
+          <div class="field-error">Enter a valid 5-digit ZIP code.</div>
+        </div>
+        <div class="field">
+          <label for="website">Website</label>
+          <input id="website" name="website" placeholder="resort.com">
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label for="base_elevation_ft">Base elevation
+            <span class="hint">Feet. A ZIP centroid lands on the town, not the mountain — this is the single biggest accuracy lever in the whole report.</span>
+          </label>
+          <input id="base_elevation_ft" name="base_elevation_ft" inputmode="numeric" placeholder="1150">
+          <div class="field-error">Enter a base elevation between 0 and 15,000 feet.</div>
+        </div>
+        <div class="field">
+          <label for="summit_elevation_ft">Summit elevation <span class="hint">Feet</span></label>
+          <input id="summit_elevation_ft" name="summit_elevation_ft" inputmode="numeric" placeholder="1450">
+          <div class="field-error">The summit cannot be below the base.</div>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label for="snowmaking">Snowmaking</label>
+          <select id="snowmaking" name="snowmaking">
+            <option value="yes">Yes — full snowmaking</option>
+            <option value="partial">Partial coverage</option>
+            <option value="no">No snowmaking</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="group-label">Resort type <span class="hint">Choose any that apply. The mix is blended across what you pick.</span></span>
+        <div class="checks" id="resort_type_group">
+          <label><input type="checkbox" name="resort_type" value="day_drive"> Day and drive market</label>
+          <label><input type="checkbox" name="resort_type" value="regional_overnight" checked> Regional with overnight lodging</label>
+          <label><input type="checkbox" name="resort_type" value="destination"> Destination resort</label>
+          <label><input type="checkbox" name="resort_type" value="tubing_focus"> Tubing and beginner focus</label>
+        </div>
+        <div class="field-error">Choose at least one resort type.</div>
+      </div>
+
+      <div class="field">
+        <label for="revenue_products">Revenue products <span class="hint">One per line</span></label>
+        <textarea id="revenue_products" name="revenue_products" placeholder="Lift tickets&#10;Season passes&#10;Lodging&#10;Lessons and rentals&#10;Tubing"></textarea>
+      </div>
+
+      <details class="advanced">
+        <summary>Exact base-area coordinates</summary>
+        <div>
+          <p class="step-note">If you have them, the weather is read here instead of at the ZIP centroid.</p>
+          <div class="pair">
+            <div class="field">
+              <label for="resort_latitude">Latitude</label>
+              <input id="resort_latitude" name="resort_latitude" inputmode="decimal" placeholder="40.4406">
+            </div>
+            <div class="field">
+              <label for="resort_longitude">Longitude</label>
+              <input id="resort_longitude" name="resort_longitude" inputmode="decimal" placeholder="-79.9959">
+            </div>
+          </div>
+        </div>
+      </details>
+    </fieldset>
+
+    <!-- 2 -->
+    <fieldset class="step" data-step="2" data-label="Season">
+      <div class="step-eyebrow">Section 2 of 7</div>
+      <h2>Season and booking</h2>
+      <p class="step-note">The booking window sets how far ahead media has to be live, and how much of the budget can be trigger-controlled at all.</p>
+
+      <div class="pair">
+        <div class="field">
+          <label for="season_start_month">Season normally starts</label>
+          <select id="season_start_month" name="season_start_month"></select>
+        </div>
+        <div class="field">
+          <label for="season_end_month">Season normally ends</label>
+          <select id="season_end_month" name="season_end_month"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="drive_time">Typical guest drive time
+          <span class="hint">Sets the radius that feeder-market relevance decays against.</span>
+        </label>
+        <select id="drive_time" name="drive_time">
+          <option value="under_1">Under 1 hour</option>
+          <option value="1_2">1 to 2 hours</option>
+          <option value="2_4" selected>2 to 4 hours</option>
+          <option value="4_plus">4 hours or more</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="booking_window">Typical booking window
+          <span class="hint">How far ahead a guest decides. Media has to be running by then.</span>
+        </label>
+        <select id="booking_window" name="booking_window">
+          <option value="same_day">Same day or next day</option>
+          <option value="week" selected>Within a week</option>
+          <option value="month">Two to four weeks out</option>
+          <option value="season">Season-long, booked in advance</option>
+        </select>
+      </div>
+
+      <div class="callout" id="bookingNote"></div>
+    </fieldset>
+
+    <!-- 3 -->
+    <fieldset class="step" data-step="3" data-label="Markets">
+      <div class="step-eyebrow">Section 3 of 7</div>
+      <h2>Feeder markets</h2>
+      <p class="step-note">Just name them. Each one is located, measured against the resort, and weighted by how far away it actually is.</p>
+
+      <div class="field">
+        <label for="target_markets">Primary feeder markets
+          <span class="hint">One per line. To override the household count for a market, write it as "Columbus: 640000".</span>
+        </label>
+        <textarea id="target_markets" name="target_markets" placeholder="Columbus&#10;Cleveland&#10;Cincinnati&#10;Pittsburgh&#10;Detroit" style="min-height:110px"></textarea>
+      </div>
+
+      <!-- Audience assumptions run on defaults. Left in the payload so the model
+           and the Smart 1 Suite fields keep receiving them. -->
+      <input type="hidden" name="affluent_share" value="35">
+      <input type="hidden" name="ski_household_rate" value="9">
+      <input type="hidden" name="persons_per_household" value="2.45">
+      <input type="hidden" name="drive_market_share" value="75">
+      <input type="hidden" name="feeder_households" value="">
+      <input type="hidden" name="feeder_population" value="">
+    </fieldset>
+
+    <!-- 4 -->
+    <fieldset class="step" data-step="4" data-label="Competition">
+      <div class="step-eyebrow">Section 4 of 7</div>
+      <h2>Competition and objective</h2>
+      <p class="step-note">Named competitors become geofence targets. The objective and the resort type together set the channel mix.</p>
+
+      <div class="field">
+        <label for="competitors">Named competitors <span class="hint">One per line</span></label>
+        <textarea id="competitors" name="competitors" placeholder="Competing mountain&#10;Competing tubing park"></textarea>
+      </div>
+      <div class="field">
+        <span class="group-label">Revenue objectives <span class="hint">Choose any that apply. The channel mix is blended across what you pick.</span></span>
+        <div class="checks" id="campaign_objective_group">
+          <label><input type="checkbox" name="campaign_objective" value="lift_tickets" checked> Lift tickets</label>
+          <label><input type="checkbox" name="campaign_objective" value="season_passes"> Season passes</label>
+          <label><input type="checkbox" name="campaign_objective" value="lodging"> Lodging</label>
+          <label><input type="checkbox" name="campaign_objective" value="local_visits"> Local visits and tubing</label>
+        </div>
+        <div class="field-error">Choose at least one revenue objective.</div>
+      </div>
+      <div class="field">
+        <label for="current_media">Current paid media
+          <span class="hint">What you're running today. The report says where this plan overlaps it and where it doesn't.</span>
+        </label>
+        <input id="current_media" name="current_media" placeholder="Paid social, some search, print">
+      </div>
+    </fieldset>
+
+    <!-- 5 -->
+    <fieldset class="step" data-step="5" data-label="Budget">
+      <div class="step-eyebrow">Section 5 of 7</div>
+      <h2>Budget</h2>
+      <p class="step-note">Connected TV, streaming radio and podcasts, data-driven targeted display, and digital out-of-home. Paid search, paid social, and print are excluded from this package.</p>
+
+      <div class="field">
+        <label for="monthly_budget">Monthly advertising budget <span class="hint">US dollars</span></label>
+        <input id="monthly_budget" name="monthly_budget" inputmode="numeric" value="6000" required>
+        <div class="field-error">Enter a monthly budget between $2,500 and $100,000.</div>
+      </div>
+      <input type="hidden" id="minimum_activation_share" name="minimum_activation_share" value="35">
+      <div class="field">
+        <label for="offers_constraints">Offers and constraints</label>
+        <textarea id="offers_constraints" name="offers_constraints" placeholder="Blackout dates, pricing rules, pass deadlines"></textarea>
+      </div>
+      <div class="field">
+        <label for="exclusions">Exclusions and notes</label>
+        <textarea id="exclusions" name="exclusions" placeholder="Anything the campaign must avoid"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- 6 -->
+    <fieldset class="step" data-step="6" data-label="Contact">
+      <div class="step-eyebrow">Section 6 of 7</div>
+      <h2>Where to send the plan</h2>
+      <p class="step-note">A Smart 1 strategist follows up with the deployable version.</p>
+
+      <div class="pair">
+        <div class="field">
+          <label for="contact_name">Name <span class="hint">Required</span></label>
+          <input id="contact_name" name="contact_name" required autocomplete="name">
+          <div class="field-error">Enter your name.</div>
+        </div>
+        <div class="field">
+          <label for="contact_role">Role</label>
+          <input id="contact_role" name="contact_role" placeholder="Director of Marketing">
+        </div>
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="contact_email">Email <span class="hint">Required</span></label>
+          <input id="contact_email" name="contact_email" type="email" required autocomplete="email">
+          <div class="field-error">Enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label for="contact_phone">Phone</label>
+          <input id="contact_phone" name="contact_phone" type="tel" autocomplete="tel">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 7 -->
+    <fieldset class="step review" data-step="7" data-label="Review">
+      <div class="step-eyebrow">Section 7 of 7</div>
+      <h2>Review and build</h2>
+      <p class="step-note">Six completed seasons of daily weather, corrected to your elevation, plus a live 16-day outlook.</p>
+      <dl id="reviewList"></dl>
+    </fieldset>
+
+    <div class="nav">
+      <button type="button" class="btn btn-ghost" id="backBtn">Back</button>
+      <button type="button" class="btn btn-primary" id="nextBtn">Continue</button>
+      <button type="submit" class="btn btn-go" id="buildBtn" style="display:none">Build the plan</button>
+    </div>
+  </form>
+
+  <div class="card report" id="report">
+    <div class="empty" id="empty">
+      <div class="empty-mark">Awaiting intake</div>
+      <h2>Your plan appears here</h2>
+      <p>Complete the seven sections. The plan builds from six completed seasons of daily weather at your mountain, and ends with what the next sixteen days would trigger.</p>
+    </div>
+  </div>
+
+</main>
+
+<script src="/report.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var MONTHS = ["", "January","February","March","April","May","June","July","August","September","October","November","December"];
+  var OBJECTIVES = { lift_tickets:"Lift tickets", season_passes:"Season passes", lodging:"Lodging", local_visits:"Local visits and tubing" };
+  var TYPES = { day_drive:"Day and drive", regional_overnight:"Regional with lodging", destination:"Destination", tubing_focus:"Tubing and beginner" };
+
+  // Mirrors lib/weather.js BOOKING. Kept in sync deliberately: the form has to
+  // tell the customer what the floor will be before they see the number.
+  var BOOKING = {
+    same_day: { lead: 1, floor: 25, why: "Same-day guests decide off the forecast. Media needs about a day of lead, and most of the budget can be trigger-controlled." },
+    week:     { lead: 3, floor: 35, why: "Media should be live about three days before a qualified day, so activation shifts forward by three days." },
+    month:    { lead: 5, floor: 50, why: "A guest booking weeks out is not reacting to Thursday's storm. The trigger overlay is smaller and half the budget stays on as a baseline." },
+    season:   { lead: 5, floor: 60, why: "Season-pass buyers decide long before the snow flies. Most of this budget should run as an always-on layer, with triggers on top." }
+  };
+
+  var form = document.getElementById("intake");
+  var rail = document.getElementById("rail");
+  var steps = [].slice.call(form.querySelectorAll(".step"));
+  var backBtn = document.getElementById("backBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  var buildBtn = document.getElementById("buildBtn");
+  var formError = document.getElementById("formError");
+  var reportEl = document.getElementById("report");
+  var current = 0;
+
+  var pageLoadedAt = Date.now();
+  var elapsedInput = document.getElementById("form_elapsed_ms");
+
+  function money(n) { return "$" + (Math.round(Number(n) || 0)).toLocaleString("en-US"); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+  function val(name) { var el = form.elements[name]; return el ? String(el.value || "").trim() : ""; }
+
+  // Checkbox groups share a name, so form.elements[name] is a list, not a field.
+  function vals(name) {
+    return [].slice.call(form.querySelectorAll('input[name="' + name + '"]:checked'))
+             .map(function (c) { return c.value; });
+  }
+
+  /* month dropdowns */
+  var startSel = document.getElementById("season_start_month");
+  var endSel = document.getElementById("season_end_month");
+  for (var m = 1; m <= 12; m++) {
+    startSel.add(new Option(MONTHS[m], m, false, m === 11));
+    endSel.add(new Option(MONTHS[m], m, false, m === 3));
+  }
+
+  /* booking window drives the activation floor — the field is no longer dead */
+  var bookingSel = document.getElementById("booking_window");
+  var bookingNote = document.getElementById("bookingNote");
+
+  function syncBooking() {
+    var b = BOOKING[bookingSel.value] || BOOKING.week;
+    bookingNote.innerHTML =
+      "<strong>Media lead: " + b.lead + (b.lead === 1 ? " day" : " days") + ".</strong> " + esc(b.why);
+  }
+  bookingSel.addEventListener("change", syncBooking);
+  syncBooking();
+
+  /* step rail */
+  steps.forEach(function (step, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "rail-step";
+    b.textContent = step.dataset.label;
+    b.addEventListener("click", function () { if (i <= current) show(i); });
+    rail.appendChild(b);
+  });
+
+  function show(i) {
+    current = i;
+    steps.forEach(function (s, n) { s.classList.toggle("is-current", n === i); });
+    [].forEach.call(rail.children, function (b, n) {
+      b.classList.toggle("is-current", n === i);
+      b.classList.toggle("is-done", n < i);
+    });
+    backBtn.style.visibility = i === 0 ? "hidden" : "visible";
+    var last = i === steps.length - 1;
+    nextBtn.style.display = last ? "none" : "";
+    buildBtn.style.display = last ? "" : "none";
+    if (last) renderReview();
+    formError.style.display = "none";
+  }
+
+  /* validation */
+  function mark(el, bad) {
+    var field = el.closest(".field");
+    if (field) field.classList.toggle("is-invalid", bad);
+    return !bad;
+  }
+
+  function checkStep(i) {
+    var ok = true;
+    var step = steps[i];
+    var el = form.elements;
+
+    step.querySelectorAll("input[required]").forEach(function (input) {
+      if (!input.value.trim()) ok = mark(input, true) && ok;
+      else mark(input, false);
+    });
+
+    if (step.contains(el.zip_code) && el.zip_code.value.trim() && !/^\d{5}(-\d{4})?$/.test(el.zip_code.value.trim())) {
+      ok = mark(el.zip_code, true) && ok;
+    }
+    if (step.contains(el.contact_email) && el.contact_email.value.trim() &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.contact_email.value.trim())) {
+      ok = mark(el.contact_email, true) && ok;
+    }
+    if (step.contains(el.monthly_budget) && el.monthly_budget.value.trim()) {
+      var b = Number(String(el.monthly_budget.value).replace(/[^0-9.]/g, ""));
+      if (!(b >= 2500 && b <= 100000)) ok = mark(el.monthly_budget, true) && ok;
+    }
+    if (step.contains(el.base_elevation_ft)) {
+      var base = Number(el.base_elevation_ft.value || 0);
+      var summit = Number(el.summit_elevation_ft.value || 0);
+      if (el.base_elevation_ft.value.trim() && !(base >= 0 && base <= 15000)) ok = mark(el.base_elevation_ft, true) && ok;
+      else mark(el.base_elevation_ft, false);
+      if (el.summit_elevation_ft.value.trim() && base && summit < base) ok = mark(el.summit_elevation_ft, true) && ok;
+      else mark(el.summit_elevation_ft, false);
+    }
+
+    ["resort_type", "campaign_objective"].forEach(function (name) {
+      var group = step.querySelector('input[name="' + name + '"]');
+      if (!group) return;
+      var field = group.closest(".field");
+      var chosen = vals(name).length > 0;
+      field.classList.toggle("is-invalid", !chosen);
+      if (!chosen) ok = false;
+    });
+
+    if (!ok) {
+      var first = step.querySelector(".is-invalid input, .is-invalid select");
+      if (first) first.focus();
+    }
+    return ok;
+  }
+
+  nextBtn.addEventListener("click", function () {
+    if (checkStep(current)) show(Math.min(current + 1, steps.length - 1));
+  });
+  backBtn.addEventListener("click", function () { show(Math.max(current - 1, 0)); });
+
+  function renderReview() {
+    var markets = val("target_markets").split(/\n|,/).map(function (s) { return s.trim(); }).filter(Boolean);
+    var elev = val("base_elevation_ft");
+    var rows = [
+      ["Resort", val("resort_name")],
+      ["ZIP", val("zip_code")],
+      ["Base elevation", elev ? Number(elev).toLocaleString("en-US") + " ft" : "Not given — weather will be read at the ZIP centroid"],
+      ["Season", MONTHS[Number(val("season_start_month"))] + " – " + MONTHS[Number(val("season_end_month"))]],
+      ["Snowmaking", form.elements.snowmaking.selectedOptions[0].text],
+      ["Booking window", form.elements.booking_window.selectedOptions[0].text],
+      ["Resort type", vals("resort_type").map(function (v) { return TYPES[v]; }).join(", ") || "Not specified"],
+      ["Feeder markets", markets.join(", ") || "Not specified"],
+      ["Objectives", vals("campaign_objective").map(function (v) { return OBJECTIVES[v]; }).join(", ") || "Not specified"],
+      ["Monthly budget", money(val("monthly_budget"))],
+      ["Send to", val("contact_email")]
+    ];
+    document.getElementById("reviewList").innerHTML = rows.map(function (r) {
+      return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>";
+    }).join("");
+  }
+
+  /* submit */
+  // When embedded, the frame grows and the parent page needs to follow.
+  function revealReport() {
+    if (window.Smart1Embed) window.Smart1Embed.revealReport();
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    for (var i = 0; i < steps.length; i++) {
+      if (!checkStep(i)) { show(i); return; }
+    }
+
+    var payload = {};
+    [].forEach.call(form.elements, function (el) {
+      if (!el.name) return;
+      if (el.type === "checkbox") return;              // handled below
+      payload[el.name] = String(el.value || "").trim();
+    });
+    payload.resort_type = vals("resort_type").join(",");
+    payload.campaign_objective = vals("campaign_objective").join(",");
+    payload.ski_participation_rate = payload.ski_household_rate;
+    payload.form_elapsed_ms = String(Date.now() - pageLoadedAt);
+    payload.operating_months = MONTHS[Number(payload.season_start_month)] + "–" + MONTHS[Number(payload.season_end_month)];
+
+    buildBtn.disabled = true;
+    buildBtn.textContent = "Building…";
+    formError.style.display = "none";
+
+    fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json().then(function (d) { return { status: res.status, data: d }; }); })
+      .then(function (r) {
+        var d = r.data || {};
+
+        // A plan came back, but the lead did not reach Smart 1 Suite. Say so.
+        if (!d.ok && d.report) {
+          Smart1Report.render(reportEl, d.report, {
+            notice: { level: "warn", text: "The plan was built, but it was not recorded in Smart 1 Suite. " + (d.details || "") }
+          });
+          revealReport();
+          return;
+        }
+        if (!d.ok) throw new Error(d.error || "The plan could not be built.");
+
+        var notice = null;
+        if (d.deduplicated) {
+          notice = { level: "info", text: "This is the plan you just built. It was not submitted twice." };
+        } else if (d.webhook && d.webhook.configured === false) {
+          notice = { level: "warn", text: "The plan was built. No Smart 1 Suite webhook is configured on this server, so no lead was created." };
+        }
+        Smart1Report.render(reportEl, d.report, { notice: notice });
+        revealReport();
+      })
+      .catch(function (err) {
+        formError.textContent = err.message || "The plan could not be built. Check the ZIP code and try again.";
+        formError.style.display = "block";
+      })
+      .finally(function () {
+        buildBtn.disabled = false;
+        buildBtn.textContent = "Build the plan";
+      });
+  });
+
+  show(0);
+})();
+</script>
+
+<!-- Iframe height bridge. Reports the page height to the parent so the embed
+     can resize itself: no inner scrollbar, no dead space below the form.
+     Height is the only thing sent. Harmless if the page is opened directly. -->
+<script>
+(function () {
+  "use strict";
+  if (window.parent === window) return;   // not embedded — nothing to do
+
+  var last = 0;
+
+  function measure() {
+    var d = document.documentElement;
+    var b = document.body;
+    return Math.ceil(Math.max(
+      d.scrollHeight, d.offsetHeight,
+      b ? b.scrollHeight : 0, b ? b.offsetHeight : 0
+    ));
+  }
+
+  function send(force) {
+    var h = measure();
+    if (!force && Math.abs(h - last) < 2) return;   // ignore sub-pixel churn
+    last = h;
+    window.parent.postMessage({ type: "smart1ski:height", height: h }, "*");
+  }
+
+  // Ask the parent to bring the frame into view once the report lands, so the
+  // reader is not left staring at the form they just finished.
+  window.Smart1Embed = {
+    revealReport: function () {
+      window.parent.postMessage({ type: "smart1ski:scroll" }, "*");
+    }
+  };
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () { send(false); }).observe(document.documentElement);
+  } else {
+    setInterval(function () { send(false); }, 400);   // older browsers
+  }
+
+  window.addEventListener("load", function () { send(true); });
+  window.addEventListener("resize", function () { send(true); });
+  document.addEventListener("click", function () { setTimeout(send, 60); });
+  send(true);
+})();
+</script>
+</body>
+</html>

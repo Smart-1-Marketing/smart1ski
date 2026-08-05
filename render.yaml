@@ -1,17 +1,17 @@
 services:
   - type: web
     name: smart1ski
-    runtime: python
+    runtime: node
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 300
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
     healthCheckPath: /health
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.4
-      - key: GHL_WEBHOOK_URL
+      - key: NODE_VERSION
+        value: 20
+      # The exact origin that embeds the form, e.g. https://suite.smart1marketing.com
+      # Leave this unset only while testing. A wildcard lets any site post to the API.
+      - key: ALLOWED_ORIGIN
         sync: false
-      - key: CLOUDINARY_URL
+      - key: SMART1_WEBHOOK_URL
         sync: false
-      - key: REPORT_NAME
-        value: dealership-rv-report

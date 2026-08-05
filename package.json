@@ -1,0 +1,22 @@
+{
+  "name": "smart1ski",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart 1 Marketing ski resort targeting and weather-trigger campaign planner",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/pipeline.test.js && node test/ui.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
