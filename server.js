@@ -5,11 +5,17 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const crypto = require("crypto");
+const fs = require("fs");
 
 const geo = require("./lib/geo");
 const weather = require("./lib/weather");
 const audienceModel = require("./lib/audience");
 const reportModel = require("./lib/report");
+const pdfModel = require("./lib/pdf");
+const cloudinary = require("./lib/cloudinary");
+const narrative = require("./lib/narrative");
+
+const REPORT_CSS = fs.readFileSync(path.join(__dirname, "public", "styles.css"), "utf8");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -166,6 +172,7 @@ function suitePayload(body, report) {
     resort_location_resolved: report.resort.location,
     media_lead_days: report.climate.media_lead_days,
     forecast_activation_days: report.outlook ? report.outlook.activation_days : null,
+    pdf_url: report.pdf && report.pdf.url ? report.pdf.url : null,
     generated_at: report.generated_at
   };
 }
@@ -231,6 +238,41 @@ app.post("/api/analyze", async (req, res) => {
 
     const audience = await audienceModel.estimate(body, site);
     const report = reportModel.build({ body, site, climate, audience, outlook });
+
+    // Narrative is prose ABOUT numbers that are already final — it runs after
+    // the report is fully built and never feeds back into the math. A failure
+    // here degrades to "no summary shown," never to a blocked report.
+    report.narrative_summary = null;
+    try {
+      const summary = await narrative.generateSummary(report);
+      if (summary.generated) {
+        report.narrative_summary = { text: summary.text, model: summary.model };
+      } else if (summary.configured && summary.error) {
+        console.warn("[smart1ski] narrative summary failed:", summary.error);
+      }
+    } catch (err) {
+      console.warn("[smart1ski] narrative summary threw:", err.message);
+    }
+
+    // PDF is rendered from the exact same markup the browser shows (including
+    // the narrative just added), then uploaded to Cloudinary. Both steps are
+    // best-effort: a resort with no browser endpoint or no Cloudinary account
+    // configured gets the same report, just without a hosted PDF link.
+    report.pdf = { configured: false, url: null };
+    try {
+      const rendered = await pdfModel.renderPdf(report, REPORT_CSS);
+      if (rendered.rendered) {
+        const publicId = `${fingerprint(body)}-${Date.now()}`;
+        const upload = await cloudinary.uploadPdf(rendered.buffer, publicId);
+        if (upload.uploaded) {
+          report.pdf = { configured: true, url: upload.url, bytes: upload.bytes };
+        } else {
+          console.warn("[smart1ski] PDF rendered but Cloudinary is not configured; no hosted link created.");
+        }
+      }
+    } catch (err) {
+      console.warn("[smart1ski] PDF generation failed:", err.message);
+    }
 
     let webhook = { configured: false, delivered: false };
     try {

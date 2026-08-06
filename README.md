@@ -157,7 +157,64 @@ breakdown, so "83" has an answer when a client asks what it means.
 Every threshold lives in the `RULES` block at the top of `lib/weather.js`.
 Change them there and nowhere else, then run `npm test`.
 
-## Abuse protection
+## Optional integrations
+
+Three things layer on top of the core report, all off by default and all
+best-effort: if any of them is unconfigured or fails, the report still builds,
+still renders, and the webhook still fires. None of them can block a report.
+
+### Hosted PDF (Cloudinary)
+
+Set `PDF_BROWSER_WS_ENDPOINT` and the three `CLOUDINARY_*` variables and every
+submission gets rendered to PDF server-side and uploaded, with the URL:
+
+- shown in the toolbar as a real "Download PDF" link, replacing the browser
+  print button
+- included in the Smart 1 Suite webhook payload as `pdf_url`, so a GHL
+  workflow can attach it to the confirmation email or the opportunity record
+
+**`PDF_BROWSER_WS_ENDPOINT` must point at a remote browser** — a Chrome
+DevTools Protocol WebSocket URL, from a service like Browserless or a
+self-hosted headless Chrome. Do not try to run a browser inside this Node
+process. Render's free instance has ~512MB of RAM; Chromium alone needs more
+than that at idle, and it will crash the whole app. This is real load, not
+theoretical — budget for it (a paid Render instance, or a separate browser
+service) before turning this on for actual prospects.
+
+The PDF is generated from `public/report.js`'s `markup()` function — the
+exact same code that renders the on-screen report, loaded into Node via
+`module.exports`. There is one report, not two documents that can drift out
+of sync with each other.
+
+`lib/cloudinary.js` and `lib/pdf.js` implement the Cloudinary REST API and
+Puppeteer-over-WebSocket orchestration directly with no vendor SDK. Tested
+against mocks in `test/integrations.test.js` — the signing algorithm, the
+request shapes, and the graceful-degradation paths are verified, but **this
+environment has no network path to a real Cloudinary account or a real
+browser**, so the live calls have not been exercised against the actual
+services. Run one real submission with both configured before depending on it.
+
+### AI executive summary (OpenAI)
+
+Set `OPENAI_API_KEY` and each report gets 2–3 paragraphs of prose ahead of
+the weekly breakdown, narrating the numbers already computed by
+`lib/plan.js`. The model is instructed, in `lib/narrative.js`, to use only a
+whitelisted set of figures handed to it and to never invent, round
+differently, or perform a new calculation — the fact sheet passed to the
+model is visible in `narrative.factSheet()` and is exactly what gets sent, so
+there is no scope for the model to reach for a number it wasn't given. The
+report is honest about what it is: the section is labeled "Written from the
+numbers above," and closes with a line stating it is AI-generated commentary
+based only on the figures already shown.
+
+This is additive narration, not analysis. The deterministic one-line summary
+(`report.summary`) still appears regardless of whether this is configured.
+
+`OPENAI_MODEL` defaults to `gpt-4o-mini`. As with the PDF pipeline, this has
+been tested against a mocked API response, not a live OpenAI account —
+confirm the request format still matches OpenAI's API before depending on it,
+since providers do change response shapes over time.
+
 
 The form is an unauthenticated public door into the CRM. It is protected by a
 honeypot field, a minimum time-on-form, a per-IP rate limit (5 per 15 minutes,

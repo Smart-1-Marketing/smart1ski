@@ -15,3 +15,22 @@ services:
         sync: false
       - key: SMART1_WEBHOOK_URL
         sync: false
+
+      # ---- Optional: hosted PDF. Leave all four unset to skip PDF storage
+      # entirely — the report still builds and prints from the browser.
+      - key: PDF_BROWSER_WS_ENDPOINT
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: smart1ski/reports
+
+      # ---- Optional: AI executive summary. Leave unset to skip it.
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini

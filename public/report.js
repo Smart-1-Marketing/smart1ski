@@ -1,6 +1,6 @@
-/* Renders a Smart 1 ski plan into a container. Loaded by both the embedded
-   app and the standalone report window, so there is exactly one copy of the
-   markup and it can never drift between them. */
+/* Renders a Smart 1 ski plan into a container. Loaded by the embedded app,
+   the standalone report window, AND the server-side PDF renderer, so there
+   is exactly one copy of the markup and it can never drift between them. */
 
 (function (root) {
   "use strict";
@@ -162,7 +162,9 @@
       html +=
         '<div class="toolbar no-print">' +
           '<button type="button" class="btn btn-primary" data-act="open">Open full report</button>' +
-          '<button type="button" class="btn btn-ghost" data-act="print">Save as PDF</button>' +
+          (r.pdf && r.pdf.url
+            ? '<a class="btn btn-primary" href="' + esc(r.pdf.url) + '" target="_blank" rel="noopener">Download PDF</a>'
+            : '<button type="button" class="btn btn-ghost" data-act="print">Save as PDF</button>') +
           '<button type="button" class="btn btn-ghost" data-act="json">Download data</button>' +
           '<button type="button" class="btn btn-ghost" data-act="reset">Start over</button>' +
         "</div>";
@@ -203,6 +205,19 @@
           boardCell("Media lead", c.media_lead_days + (c.media_lead_days === 1 ? " day" : " days")) +
         "</div>" +
       "</div>";
+
+    /* ---------------------------------------------------- narrative summary */
+    if (r.narrative_summary && r.narrative_summary.text) {
+      html +=
+        '<section class="block narrative-block">' +
+          '<div class="block-eyebrow">Written from the numbers above</div>' +
+          "<h3>What this season means for " + esc(r.resort.name) + "</h3>" +
+          r.narrative_summary.text.split(/\n\n+/).map(function (para) {
+            return "<p class='narrative-p'>" + esc(para) + "</p>";
+          }).join("") +
+          '<p class="methodology">AI-generated commentary based only on the figures already shown in this report. It does not add new data or make performance claims — check the sections below for the source of every number.</p>' +
+        "</section>";
+    }
 
     /* --------------------------------------------------- data provenance */
     html +=
@@ -596,4 +611,10 @@
   }
 
   root.Smart1Report = { render: render, markup: markup, openStandalone: openStandalone };
-})(window);
+
+  // Server-side (Node) callers only ever need markup() — render()/openStandalone()
+  // touch document/window and are browser-only.
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { markup: markup };
+  }
+})(typeof window !== "undefined" ? window : {});

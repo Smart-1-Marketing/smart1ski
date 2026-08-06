@@ -320,3 +320,8 @@ table.vs td.vs-us{color:var(--ink);background:#F0FAF8;border-left:3px solid var(
 .cta-panel p{color:#C9D8EA;font-size:13.5px;max-width:70ch;margin:8px 0 18px}
 .cta-btn{display:inline-block;background:var(--gold);color:#3A2705;font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:13px 26px;border-radius:9px;text-decoration:none}
 .cta-btn:hover{background:#E3A32F}
+
+/* --------------------------------------------------------- narrative summary */
+.narrative-block{background:linear-gradient(180deg,var(--snow),var(--paper));border-left:4px solid var(--teal)}
+.narrative-p{font-size:14.5px;line-height:1.65;margin:0 0 12px;color:var(--ink)}
+.narrative-p:last-of-type{margin-bottom:14px}
