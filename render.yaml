@@ -1,36 +1,17 @@
 services:
   - type: web
     name: smart1ski
-    runtime: node
+    runtime: python
     plan: free
-    buildCommand: npm install --omit=dev
-    startCommand: npm start
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 300
     healthCheckPath: /health
     envVars:
-      - key: NODE_VERSION
-        value: 20
-      # The exact origin that embeds the form, e.g. https://suite.smart1marketing.com
-      # Leave this unset only while testing. A wildcard lets any site post to the API.
-      - key: ALLOWED_ORIGIN
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: GHL_WEBHOOK_URL
         sync: false
-      - key: SMART1_WEBHOOK_URL
+      - key: CLOUDINARY_URL
         sync: false
-
-      # ---- Optional: hosted PDF. Leave all four unset to skip PDF storage
-      # entirely — the report still builds and prints from the browser.
-      - key: PDF_BROWSER_WS_ENDPOINT
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
-      - key: CLOUDINARY_FOLDER
-        value: smart1ski/reports
-
-      # ---- Optional: AI executive summary. Leave unset to skip it.
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: OPENAI_MODEL
-        value: gpt-4o-mini
+      - key: REPORT_NAME
+        value: dealership-rv-report
