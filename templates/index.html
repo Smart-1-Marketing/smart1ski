@@ -6,7 +6,7 @@
   <title>Smart 1 Ski Resort Growth & Weather Trigger Plan</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{--navy:#1A2E58;--blue:#1677c8;--blue2:#3a95e0;--ice:#eaf6ff;--green:#26a269;--text:#172033;--muted:#637083;--line:#dbe3ec;--white:#fff;--cta:#ff6b3d}
+    :root{--navy:#0A2240;--blue:#009ED2;--blue2:#3a95e0;--ice:#eaf6ff;--green:#26a269;--text:#172033;--muted:#637083;--line:#dbe3ec;--white:#fff;--cta:#ff6b3d}
     *{box-sizing:border-box} body{margin:0;background:#f4f7fb;color:var(--text);font-family:Montserrat,Arial,sans-serif}
     .shell{max-width:980px;margin:auto;padding:22px}.hero{background:linear-gradient(135deg,var(--navy),#274a82);color:#fff;padding:30px;border-radius:18px 18px 0 0}
     .hero h1{margin:0 0 8px;font-size:clamp(25px,4vw,42px)}.hero p{margin:0;max-width:760px;line-height:1.55}
@@ -25,7 +25,26 @@
     .section{margin:26px 0}.section h3{color:var(--navy);border-bottom:2px solid var(--ice);padding-bottom:8px}
     .trigger{border-left:4px solid var(--blue);padding:10px 13px;margin:10px 0;background:#f8fafc}.trigger b{color:var(--navy)}
     .allocation{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.allocation div{padding:12px;background:#f5f7fa;border-radius:9px;text-align:center}.allocation b{display:block;color:var(--navy)}
-    .notice{font-size:12px;color:var(--muted);line-height:1.5}.print{float:right}
+    .notice{font-size:12px;color:var(--muted);line-height:1.5}.print{float:right}.pdfbtn{float:right;margin-right:10px;background:var(--blue);color:#fff;text-decoration:none;display:inline-block}
+    /* Smart 1 wordmark lockup + footer */
+    .wordmark{font-weight:900;letter-spacing:.14em;font-size:14px;margin-bottom:10px}
+    .wordmark .one{color:var(--blue)}
+    .hero .wordmark{color:#fff}
+    .site-foot{text-align:center;color:var(--muted);font-size:12.5px;padding:18px 10px 26px}
+    .site-foot b{color:var(--navy)}
+    /* honeypot: visually hidden but present in the form */
+    .hp-field{position:absolute!important;left:-9999px!important;top:-9999px!important;height:1px;width:1px;overflow:hidden;opacity:0}
+    /* horizontal budget allocation bars */
+    .allocbars{margin:14px 0}
+    .allocbar{display:grid;grid-template-columns:170px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+    .allocbar .track{background:#eef3f8;border-radius:999px;height:16px;overflow:hidden}
+    .allocbar .fill{height:100%;border-radius:999px}
+    .allocbar .amt{font-weight:800;color:var(--navy);text-align:right}
+    @media(max-width:640px){.allocbar{grid-template-columns:110px 1fr 80px}}
+    /* page-load overlay reusing the ski loader */
+    #pageLoader{position:fixed;inset:0;background:#f4f7fb;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}
+    #pageLoader.hide{opacity:0;pointer-events:none}
+    #pageLoader .inner{text-align:center;padding:20px}
     /* visual option cards (radio) */
     .optcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
     .optcard{position:relative;cursor:pointer}
@@ -59,13 +78,30 @@
     .lbar{height:8px;width:min(340px,80%);background:#e3ecf5;border-radius:999px;overflow:hidden;margin:16px auto 6px}
     .lbar i{display:block;height:100%;width:8%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:999px;transition:width .4s ease}
     @media(prefers-reduced-motion:reduce){.ll-sweep,.ll-pulse,.ll-sf{animation:none}}
-    @media(max-width:720px){.grid,.metrics,.allocation{grid-template-columns:1fr}.shell{padding:0}.hero,.card{border-radius:0}.progress{gap:4px}.print{float:none;margin-bottom:10px}}
-    @media print{body{background:#fff}.hero,.card{box-shadow:none}.print,.restart{display:none!important}.shell{max-width:none;padding:0}}
+    @media(max-width:720px){.grid,.metrics,.allocation{grid-template-columns:1fr}.shell{padding:0}.hero,.card{border-radius:0}.progress{gap:4px}.print,.pdfbtn{float:none;margin-bottom:10px}}
+    @media print{body{background:#fff}.hero,.card{box-shadow:none}.print,.pdfbtn,.restart{display:none!important}.shell{max-width:none;padding:0}}
   </style>
 </head>
 <body>
+<div id="pageLoader" aria-hidden="true">
+  <div class="inner">
+    <div class="wordmark" style="color:var(--navy)">SMART <span class="one">1</span> MARKETING</div>
+    <svg class="ski-svg" viewBox="0 0 200 132" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs><linearGradient id="swp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a95e0" stop-opacity=".55"/><stop offset="1" stop-color="#3a95e0" stop-opacity="0"/></linearGradient></defs>
+      <g class="ll-sweep"><path d="M100 74 L100 -8 A82 82 0 0 1 168 26 Z" fill="url(#swp)"/></g>
+      <path d="M0 120 L46 60 L78 94 L116 46 L150 88 L200 42 L200 132 L0 132 Z" fill="#16324f"/>
+      <path d="M0 132 L38 86 L74 114 L112 80 L150 110 L200 76 L200 132 Z" fill="#22496f"/>
+      <circle class="ll-pulse" cx="116" cy="46" r="5" fill="none" stroke="#ff6b3d" stroke-width="2"/>
+      <circle cx="116" cy="46" r="5" fill="#ff6b3d"/>
+      <circle class="ll-sf a" cx="34" cy="8" r="2" fill="#cfe6f4"/><circle class="ll-sf b" cx="92" cy="6" r="1.6" fill="#cfe6f4"/>
+      <circle class="ll-sf c" cx="150" cy="10" r="2.2" fill="#cfe6f4"/><circle class="ll-sf d" cx="120" cy="4" r="1.5" fill="#cfe6f4"/>
+    </svg>
+    <p class="hint">Loading the ski resort planner…</p>
+  </div>
+</div>
 <div class="shell">
   <header class="hero">
+    <div class="wordmark">SMART <span class="one">1</span> MARKETING</div>
     <h1>Ski Resort Growth & Weather Trigger Plan</h1>
     <p>Answer a few quick questions about your resort and markets. We estimate the rest — feeder-market size, audiences, weather triggers and media — and suggest the right package.</p>
   </header>
@@ -76,13 +112,9 @@
       <form id="skiForm">
         <!-- fields we estimate / assume automatically -->
         <input type="hidden" name="operating_months" value="November–March">
-        <input type="hidden" name="feeder_population" value="">
-        <input type="hidden" name="feeder_households" value="">
-        <input type="hidden" name="affluent_share" value="">
-        <input type="hidden" name="ski_household_rate" value="">
-        <input type="hidden" name="persons_per_household" value="">
-        <input type="hidden" name="drive_market_share" value="">
         <input type="hidden" name="minimum_activation_share" value="35">
+        <!-- honeypot: humans never see or fill this -->
+        <div class="hp-field" aria-hidden="true"><label>Leave this field empty</label><input type="text" name="s1_hp" tabindex="-1" autocomplete="off"></div>
 
         <section class="step active">
           <h2>1. Resort Information</h2>
@@ -125,7 +157,8 @@
         <section class="step">
           <h2>3. Campaign Goals</h2>
           <div class="grid">
-            <div class="full"><label>Primary Objective</label><select name="campaign_objective"><option value="season_passes">Season Pass Sales</option><option value="lift_tickets" selected>Lift Tickets &amp; Weekend Visits</option><option value="lodging">Lodging &amp; Destination Packages</option><option value="local_visits">Local Day Trips / Tubing</option></select></div>
+            <div><label>Primary Objective</label><select name="campaign_objective"><option value="season_passes">Season Pass Sales</option><option value="lift_tickets" selected>Lift Tickets &amp; Weekend Visits</option><option value="lodging">Lodging &amp; Destination Packages</option><option value="local_visits">Local Day Trips / Tubing</option></select></div>
+            <div><label>Monthly Media Budget <span style="font-weight:500;color:var(--muted)">(optional)</span></label><select name="monthly_budget"><option value="3000">About $3,000 / month</option><option value="6000" selected>About $6,000 / month</option><option value="10000">About $10,000 / month</option><option value="15000">$15,000+ / month</option></select></div>
           </div>
           <div style="margin-top:16px"><label>Primary Booking Window</label>
             <div class="optcards" id="bookingCards">
@@ -181,8 +214,42 @@
     </div>
     <div id="results"></div>
   </main>
+  <footer class="site-foot"><b>Smart 1 Marketing</b> · (614) 536-0768 · smart1marketing.com</footer>
 </div>
 <script>
+/* ---- page-load overlay: hide when the app is ready ---- */
+(function(){
+  function ready(){
+    const pl=document.getElementById("pageLoader");
+    if(pl){pl.classList.add("hide");setTimeout(()=>pl.remove(),450);}
+    try{parent.postMessage("app-ready","*");}catch(e){}
+  }
+  if(document.readyState==="complete")setTimeout(ready,150);
+  else window.addEventListener("load",()=>setTimeout(ready,150));
+  setTimeout(ready,4000); // safety: never trap the user behind the overlay
+})();
+
+/* ---- partial lead capture ---- */
+const LEAD_ID=(crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(16).slice(2));
+const ATTR=(()=>{const q=new URLSearchParams(location.search);const keys=["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","fbclid"];const o={};keys.forEach(k=>{const v=q.get(k);if(v)o[k]=v.slice(0,200);});o.referrer_url=(document.referrer||"").slice(0,300);o.landing_page_url=(q.get("s1_ref")||location.href).slice(0,300);return o;})();
+let partialSent=false,finalSent=false;
+function partialPayload(){
+  const f=document.getElementById("skiForm");if(!f)return{};
+  const d=Object.fromEntries(new FormData(f).entries());
+  return{resort_name:(d.resort_name||"").trim(),website:(d.website||"").trim(),zip_code:(d.zip_code||"").trim(),target_markets:(d.target_markets||"").trim(),s1_hp:(d.s1_hp||"").trim()};
+}
+function sendPartial(){
+  if(partialSent||finalSent)return;
+  const p=partialPayload();
+  if(!p.website&&!p.resort_name)return; // need at least something identifying
+  partialSent=true;
+  const body=JSON.stringify({...p,...ATTR,lead_id:LEAD_ID,lead_stage:"partial"});
+  if(navigator.sendBeacon)navigator.sendBeacon("/api/partial-lead",new Blob([body],{type:"application/json"}));
+  else fetch("/api/partial-lead",{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:true});
+}
+window.addEventListener("pagehide",sendPartial);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")sendPartial();});
+
 /* ---- state → major markets (multi-select, grouped by state) ---- */
 const STATES={
  "Colorado":{ab:"CO",m:["Denver","Colorado Springs","Fort Collins","Boulder","Grand Junction","Pueblo"]},
@@ -263,7 +330,7 @@ function validStep(){
   for(const el of required){if(el.offsetParent===null&&el.type==="hidden")continue; if(!el.checkValidity()){el.reportValidity();return false}}
   return true;
 }
-next.onclick=()=>{if(validStep())showStep(current+1)};back.onclick=()=>showStep(current-1);
+next.onclick=()=>{if(validStep()){if(current===0)sendPartial();showStep(current+1);}};back.onclick=()=>showStep(current-1);
 
 /* loader status cycle */
 let loadTimer=null;
@@ -277,20 +344,24 @@ function stopLoader(){clearInterval(loadTimer);const bar=document.getElementById
 form.addEventListener("submit",async e=>{
  e.preventDefault(); if(!validStep())return;
  document.getElementById("formArea").style.display="none";document.getElementById("loading").style.display="block";startLoader();
- const payload=Object.fromEntries(new FormData(form).entries());
+ const payload={...Object.fromEntries(new FormData(form).entries()),...ATTR,lead_id:LEAD_ID};
  try{
   const response=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
   const data=await response.json();
   if(!response.ok)throw new Error(data.details||data.error||"Request failed");
-  stopLoader();render(data.report,data.webhook);
+  finalSent=true;stopLoader();render(data.report,data.webhook,data.report_pdf_url);
  }catch(err){
   stopLoader();document.getElementById("loading").style.display="none";document.getElementById("formArea").style.display="block";
   errorBox.textContent=err.message;errorBox.style.display="block";
  }
 });
-function render(r,webhook){
+function render(r,webhook,pdfUrl){
  const c=r.climate,a=r.audience,b=r.budget_plan,s=r.savings_model,w=r.historical_weekly_plan||[];
  const metric=(v,label)=>`<div class="metric"><b>${v}</b><span>${label}</span></div>`;
+ const escapeHtml=t=>String(t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+ const summaryHtml=r.market_summary?`<section class="section"><h3>Market assessment</h3>${String(r.market_summary).split(/\n\n+/).map(p=>`<p>${escapeHtml(p)}</p>`).join("")}</section>`:"";
+ const allocTotal=(b.allocation.ctv||0)+(b.allocation.display||0)+(b.allocation.audio||0)||1;
+ const allocBar=(label,val,color)=>`<div class="allocbar"><span>${label}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.round(val/allocTotal*100))}%;background:${color}"></div></div><span class="amt">${money(val)}</span></div>`;
  const weekRows=w.map(x=>`<tr>
    <td style="padding:8px;border-bottom:1px solid #e5e9ef">Week ${x.week_number}</td>
    <td style="padding:8px;border-bottom:1px solid #e5e9ef">${x.avg_qualified_ad_days}</td>
@@ -305,10 +376,14 @@ function render(r,webhook){
  const el=document.getElementById("results");el.style.display="block";
  el.innerHTML=`
  <button class="btn secondary print" onclick="window.print()">Print / Save PDF</button>
- <h2>${r.resort.name}: Ski Resort Marketing Plan</h2>
+ ${pdfUrl?`<a class="btn pdfbtn" href="${pdfUrl}" target="_blank" rel="noopener">Download PDF</a>`:""}
+ <div class="wordmark" style="color:var(--navy)">SMART <span class="one">1</span> MARKETING</div>
+ <h2 style="margin-top:4px">${r.resort.name}: Ski Resort Marketing Plan</h2>
  <p class="hint">${r.resort.location} · ZIP ${r.resort.zip_code} · Approx. elevation ${number(r.resort.elevation_feet_estimate)} ft</p>
 
  <div class="score"><strong>${r.weather_marketing_readiness_score}</strong><div><b>Weather-Marketing Readiness Score</b><br><span class="hint">A directional planning score based on historical cold, snowfall, bluebird, rain and wind patterns.</span></div></div>
+
+ ${summaryHtml}
 
  <section class="section"><h3>Estimated Targeted Skiing Households</h3>
   <div class="metrics">
@@ -371,6 +446,11 @@ function render(r,webhook){
    <div><b>${money(b.allocation.ctv)}</b>Connected TV</div>
    <div><b>${money(b.allocation.display)}</b>Programmatic Display</div>
    <div><b>${money(b.allocation.audio)}</b>Digital Audio</div>
+  </div>
+  <div class="allocbars">
+   ${allocBar("Connected TV",b.allocation.ctv,"var(--navy)")}
+   ${allocBar("Programmatic Display",b.allocation.display,"var(--blue)")}
+   ${allocBar("Digital Audio",b.allocation.audio,"#2DBB72")}
   </div>
   <p class="hint">Estimated monthly delivery: ${number(b.impressions.ctv)} CTV impressions, ${number(b.impressions.display)} display impressions, and ${number(b.impressions.audio)} digital audio impressions.</p>
   <div class="trigger"><b>Connected TV</b><br><span class="hint">Awareness and urgency among targeted skiing households during powder, cold, opening, and bluebird windows.</span></div>

@@ -4,6 +4,8 @@ import math
 import os
 import re
 import calendar
+import threading
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -27,10 +29,46 @@ app = Flask(__name__)
 # Standardized webhook variable (falls back to the old name for safety).
 WEBHOOK_URL = (os.getenv("GHL_WEBHOOK_URL") or os.getenv("SMART1_WEBHOOK_URL") or "").strip()
 # Base name / Cloudinary folder for generated report PDFs.
-REPORT_NAME = (os.getenv("REPORT_NAME") or "dealership-rv-report").strip()
+REPORT_NAME = (os.getenv("REPORT_NAME") or "smart1-ski-report").strip()
+# OpenAI model for the AI market analysis narrative.
+OPENAI_MODEL = (os.getenv("OPENAI_MODEL") or "gpt-4.1-mini").strip()
 
 # cloudinary auto-configures from the CLOUDINARY_URL env var.
 cloudinary.config(secure=True)
+
+
+# ---------------------------------------------------------------------------
+# abuse guards: honeypot + simple in-memory per-IP rate limits
+# ---------------------------------------------------------------------------
+_RATE_LOCK = threading.Lock()
+_RATE_BUCKETS = {}  # {(bucket, ip): [timestamps]}
+
+
+def client_ip():
+    fwd = (request.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+    return fwd or (request.remote_addr or "unknown")
+
+
+def rate_limited(bucket, limit, window_seconds=3600):
+    """Return True when this IP has exceeded `limit` hits in the window."""
+    key = (bucket, client_ip())
+    now = time.time()
+    with _RATE_LOCK:
+        hits = [t for t in _RATE_BUCKETS.get(key, []) if now - t < window_seconds]
+        if len(hits) >= limit:
+            _RATE_BUCKETS[key] = hits
+            return True
+        hits.append(now)
+        _RATE_BUCKETS[key] = hits
+        # opportunistic cleanup so the map cannot grow unbounded
+        if len(_RATE_BUCKETS) > 5000:
+            for k in [k for k, v in _RATE_BUCKETS.items() if not v or now - v[-1] > window_seconds]:
+                _RATE_BUCKETS.pop(k, None)
+    return False
+
+
+def honeypot_tripped(body):
+    return bool(str(body.get("s1_hp", "") or "").strip())
 
 
 # ---------------------------------------------------------------------------
@@ -408,10 +446,90 @@ def build_report(body, location, climate):
 
 
 # ---------------------------------------------------------------------------
+# AI market analysis (OpenAI, with deterministic fallback)
+# ---------------------------------------------------------------------------
+def _fallback_summary(report):
+    resort = report.get("resort", {}) or {}
+    climate = report.get("climate", {}) or {}
+    audience = report.get("audience", {}) or {}
+    budget = report.get("budget_plan", {}) or {}
+    savings = report.get("savings_model", {}) or {}
+    alloc = budget.get("allocation", {}) or {}
+    return (
+        f"{resort.get('name') or 'Your resort'} in {resort.get('location') or 'your market'} scores "
+        f"{report.get('weather_marketing_readiness_score')}/100 on weather-marketing readiness, based on "
+        f"{climate.get('seasons_analyzed') or 'recent'} historical seasons of cold, snowfall, bluebird, rain and wind patterns.\n\n"
+        f"The selected feeder markets contain an estimated {audience.get('feeder_households_used'):,} households, "
+        f"of which roughly {audience.get('estimated_targeted_skiing_households'):,} are targeted skiing households "
+        f"({audience.get('estimated_targeted_skiers_and_riders'):,} estimated skiers and riders). The recommended "
+        f"${budget.get('budget'):,}/month media plan allocates ${alloc.get('ctv', 0):,} to Connected TV, "
+        f"${alloc.get('display', 0):,} to programmatic display and ${alloc.get('audio', 0):,} to digital audio, and the "
+        f"historical savings model shows about ${savings.get('estimated_budget_protected', 0):,} "
+        f"({savings.get('estimated_budget_protected_percent', 0)}%) of always-on season spend that could be protected "
+        f"with weather-triggered activation.\n\n"
+        "Top recommendations: (1) run weather-triggered campaigns that scale spend into historically strong powder, "
+        "bluebird and snowmaking windows and suppress it in rain or high-wind periods; (2) concentrate budget on the "
+        "targeted skiing-household audience in your named feeder markets with geofenced competitor and retail "
+        "targeting; (3) sequence the season with the phased plan — passes preseason, urgency creative in peak winter "
+        "and value offers in spring."
+    )
+
+
+def generate_ai_summary(report, body):
+    """3-4 paragraph market narrative via OpenAI; deterministic fallback if unavailable."""
+    api_key = (os.getenv("OPENAI_API_KEY") or "").strip()
+    if not api_key:
+        return _fallback_summary(report)
+    try:
+        from openai import OpenAI
+
+        client = OpenAI(api_key=api_key)
+        facts = {
+            "resort": report.get("resort", {}),
+            "weather_marketing_readiness_score": report.get("weather_marketing_readiness_score"),
+            "audience": report.get("audience", {}),
+            "budget_plan": {k: report.get("budget_plan", {}).get(k) for k in ("budget", "allocation", "impressions", "note")},
+            "savings_model": report.get("savings_model", {}),
+            "climate": {k: v for k, v in (report.get("climate", {}) or {}).items() if k != "weekly"},
+            "target_markets": body.get("target_markets", ""),
+            "resort_type": body.get("resort_type", ""),
+            "campaign_objective": body.get("campaign_objective", ""),
+        }
+        response = client.responses.create(
+            model=OPENAI_MODEL,
+            input=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a senior media strategist at Smart 1 Marketing writing the market-assessment "
+                        "section of a ski-resort advertising report. Write 3-4 short paragraphs of plain prose "
+                        "(no headings, no bullet lists, no markdown): a resort market assessment grounded in the "
+                        "readiness score, feeder-market households, budget plan and climate summary provided, "
+                        "ending with your top three recommendations woven into the final paragraph. STRICT RULE: "
+                        "use ONLY the numbers provided in the data — never invent, round differently, or "
+                        "contradict any figure. Confident, consultative tone; no guarantees of snowfall or revenue."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": "Report data (all figures are authoritative):\n" + json.dumps(facts, indent=2, default=str),
+                },
+            ],
+            temperature=0.25,
+            max_output_tokens=1200,
+        )
+        text = (response.output_text or "").strip()
+        return text or _fallback_summary(report)
+    except Exception as exc:
+        app.logger.warning("AI market summary failed, using fallback: %s", exc)
+        return _fallback_summary(report)
+
+
+# ---------------------------------------------------------------------------
 # PDF (reportlab) + Cloudinary upload
 # ---------------------------------------------------------------------------
-NAVY = colors.HexColor("#1A2E58")
-BLUE = colors.HexColor("#1677c8")
+NAVY = colors.HexColor("#0A2240")
+BLUE = colors.HexColor("#009ED2")
 MUTED = colors.HexColor("#5f6f83")
 LINE = colors.HexColor("#dbe3ec")
 ICE = colors.HexColor("#eaf6ff")
@@ -446,12 +564,19 @@ def build_report_pdf(report):
     story.append(Paragraph(f"{resort.get('location','')} &nbsp;·&nbsp; ZIP {resort.get('zip_code','')} &nbsp;·&nbsp; Approx. elevation {_fmt(resort.get('elevation_feet_estimate'))} ft", small))
 
     score_tbl = Table([[
-        Paragraph(f"<font size=22 color='#1677c8'><b>{report.get('weather_marketing_readiness_score','—')}</b></font>", cell),
+        Paragraph(f"<font size=22 color='#009ED2'><b>{report.get('weather_marketing_readiness_score','—')}</b></font>", cell),
         Paragraph("<b>Weather-Marketing Readiness Score</b><br/><font size=8 color='#5f6f83'>Directional planning score from historical cold, snow, bluebird, rain &amp; wind patterns.</font>", cell),
     ]], colWidths=[1.0 * inch, 5.6 * inch])
     score_tbl.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), ICE), ("BOX", (0, 0), (-1, -1), 0.5, LINE), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("TOPPADDING", (0, 0), (-1, -1), 10), ("BOTTOMPADDING", (0, 0), (-1, -1), 10), ("LEFTPADDING", (0, 0), (-1, -1), 12)]))
     story.append(Spacer(1, 10))
     story.append(score_tbl)
+
+    if report.get("market_summary"):
+        story.append(Paragraph("Market Assessment", h2))
+        for para in str(report["market_summary"]).split("\n\n"):
+            if para.strip():
+                story.append(Paragraph(para.strip().replace("&", "&amp;").replace("<", "&lt;"), body))
+                story.append(Spacer(1, 4))
 
     def kv_block(pairs):
         rows = [[Paragraph(k, small), Paragraph(f"<b>{v}</b>", cell)] for k, v in pairs]
@@ -478,7 +603,55 @@ def build_report_pdf(report):
     story.append(Paragraph("Recommended Monthly Media Plan: " + _money(b.get("budget")), h2))
     alloc = b.get("allocation", {}) or {}
     kv_block([("Connected TV", _money(alloc.get("ctv"))), ("Programmatic Display", _money(alloc.get("display"))), ("Digital Audio", _money(alloc.get("audio")))])
+
+    # simple 3-bar allocation visual: colored cell widths scaled to channel share
+    total_alloc = sum(num(alloc.get(k)) for k in ("ctv", "display", "audio")) or 1
+    bar_colors = {"ctv": NAVY, "display": BLUE, "audio": colors.HexColor("#2DBB72")}
+    bar_labels = {"ctv": "Connected TV", "display": "Programmatic Display", "audio": "Digital Audio"}
+    max_bar = 4.2 * inch
+    story.append(Spacer(1, 6))
+    for k in ("ctv", "display", "audio"):
+        share = num(alloc.get(k)) / total_alloc
+        bar_w = max(0.25 * inch, max_bar * share)
+        row = Table(
+            [[Paragraph(bar_labels[k], small), "", Paragraph(f"<b>{_money(alloc.get(k))}</b> ({round(share * 100)}%)", cell)]],
+            colWidths=[1.5 * inch, bar_w, 6.6 * inch - 1.5 * inch - bar_w],
+        )
+        row.setStyle(TableStyle([
+            ("BACKGROUND", (1, 0), (1, 0), bar_colors[k]),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("LEFTPADDING", (2, 0), (2, 0), 8),
+        ]))
+        story.append(row)
+    story.append(Spacer(1, 4))
     story.append(Paragraph(b.get("note", ""), small))
+
+    # compact week-by-week historical season plan
+    weekly = report.get("historical_weekly_plan", []) or []
+    if weekly:
+        story.append(Paragraph("Week-by-Week Historical Ski Season Plan", h2))
+        head = ["Week", "Qualified ad days", "Snowfall", "Suppressed", "Confidence", "Recommendation"]
+        rows = [[Paragraph(f"<b>{x}</b>", ParagraphStyle("th", parent=small, textColor=colors.white)) for x in head]]
+        for w in weekly:
+            rows.append([
+                Paragraph(str(w.get("week_number", "")), cell),
+                Paragraph(str(w.get("avg_qualified_ad_days", "")), cell),
+                Paragraph(f"{w.get('avg_snowfall_inches','')}\"", cell),
+                Paragraph(str(w.get("avg_suppressed_days", "")), cell),
+                Paragraph(f"{w.get('activation_confidence','')}%", cell),
+                Paragraph(str(w.get("recommendation", "")), ParagraphStyle("rec", parent=small)),
+            ])
+        wk = Table(rows, colWidths=[0.55 * inch, 1.15 * inch, 0.8 * inch, 0.95 * inch, 0.95 * inch, 2.2 * inch], repeatRows=1)
+        wk.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), NAVY),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, ICE]),
+            ("GRID", (0, 0), (-1, -1), 0.4, LINE),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ]))
+        story.append(wk)
 
     story.append(Paragraph("Weather Trigger Playbook", h2))
     for t in report.get("trigger_plan", []) or []:
@@ -494,6 +667,8 @@ def build_report_pdf(report):
 
     story.append(Spacer(1, 8))
     story.append(Paragraph(report.get("disclaimer", ""), small))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("<b>Smart 1 Marketing</b> &nbsp;·&nbsp; (614) 536-0768 &nbsp;·&nbsp; smart1marketing.com", ParagraphStyle("footer", parent=small, textColor=NAVY)))
 
     buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=letter, title=f"{resort.get('name','')} Ski Marketing Plan", leftMargin=0.6 * inch, rightMargin=0.6 * inch, topMargin=0.6 * inch, bottomMargin=0.6 * inch)
@@ -547,9 +722,46 @@ def health():
     return jsonify({"ok": True, "service": "smart1ski"})
 
 
+@app.post("/api/partial-lead")
+def partial_lead():
+    """Salvage partial leads (no email required). Always responds {ok: true}."""
+    try:
+        body = request.get_json(silent=True) or {}
+        if honeypot_tripped(body) or rate_limited("partial", limit=30):
+            return jsonify({"ok": True})
+        if not str(body.get("resort_name", "") or "").strip() and not str(body.get("website", "") or "").strip():
+            return jsonify({"ok": True})
+        payload = {
+            "source": "Smart 1 Ski Resort Package",
+            "report_status": "partial",
+            "lead_id": str(body.get("lead_id", "") or "")[:100],
+            "resort_name": str(body.get("resort_name", "") or "")[:200],
+            "website": str(body.get("website", "") or "")[:300],
+            "zip_code": str(body.get("zip_code", "") or "")[:20],
+            "target_markets": str(body.get("target_markets", "") or "")[:500],
+        }
+        for k in ("utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "referrer_url", "landing_page_url"):
+            v = str(body.get(k, "") or "").strip()
+            if v:
+                payload[k] = v[:300]
+        try:
+            send_webhook(payload)
+        except Exception as exc:
+            app.logger.warning("Partial-lead webhook failed: %s", exc)
+    except Exception:
+        app.logger.exception("Partial-lead handling failed")
+    return jsonify({"ok": True})
+
+
 @app.post("/api/analyze")
 def analyze():
     body = request.get_json(silent=True) or {}
+    if honeypot_tripped(body):
+        # pretend success so bots learn nothing; do not burn quota
+        return jsonify({"ok": False, "error": "Unable to generate report."}), 400
+    if rate_limited("analyze", limit=6):
+        return jsonify({"ok": False, "error": "Too many requests from this network. Please try again in an hour."}), 429
+    body.pop("s1_hp", None)  # never forward the honeypot field
     error = validate(body)
     if error:
         return jsonify({"ok": False, "error": error}), 400
@@ -569,6 +781,7 @@ def analyze():
             }
 
         report = build_report(body, location, climate)
+        report["market_summary"] = generate_ai_summary(report, body)
 
         # Generate the branded PDF and store it in Cloudinary. Guarded so a
         # PDF/upload failure never blocks the lead from reaching GHL.
@@ -592,6 +805,8 @@ def analyze():
             "recommended_monthly_budget": report["budget_plan"]["budget"],
             "resort_location_resolved": report["resort"]["location"],
             "generated_at": report["generated_at"],
+            "market_summary": report["market_summary"],
+            "lead_id": str(body.get("lead_id", "") or "")[:100],
         }
 
         try:

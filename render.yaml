@@ -13,5 +13,9 @@ services:
         sync: false
       - key: CLOUDINARY_URL
         sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
       - key: REPORT_NAME
-        value: dealership-rv-report
+        value: smart1-ski-report

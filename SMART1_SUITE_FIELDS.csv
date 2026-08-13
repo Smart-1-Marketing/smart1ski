@@ -10,7 +10,6 @@ target_markets,Primary Feeder Markets,Multi Line
 feeder_population,Feeder Market Population,Number
 feeder_households,Feeder Market Households,Number
 affluent_share,Affluent Share Assumption,Number
-ski_participation_rate,Winter Sports Participation Rate,Number
 drive_market_share,Drive Market Relevance,Number
 drive_time,Typical Guest Drive Time,Dropdown
 competitors,Named Competitors,Multi Line
@@ -25,7 +24,6 @@ contact_email,Contact Email,Contact Email
 contact_phone,Contact Phone,Contact Phone
 contact_role,Contact Role,Single Line
 weather_marketing_readiness_score,Weather Marketing Readiness Score,Number
-estimated_targetable_pool,Estimated Targetable Pool,Number
 recommended_monthly_budget,Recommended Monthly Budget,Number
 resort_location_resolved,Resolved Resort Location,Single Line
 report_json,Ski Resort Report JSON,Multi Line
@@ -39,4 +37,6 @@ minimum_activation_share,Minimum Activation Share,Number
 estimated_targeted_skiing_households,Estimated Targeted Skiing Households,Number
 estimated_budget_protected,Estimated Budget Protected,Number
 estimated_budget_protected_percent,Estimated Budget Protected Percent,Number
+market_summary,AI Market Assessment,Multi Line
+lead_id,Lead ID,Single Line
 report_pdf_url,Report PDF URL,Website
