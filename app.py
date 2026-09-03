@@ -9,6 +9,8 @@ import time
 from datetime import datetime, timezone
 
 import requests
+
+import lead_store
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
 
@@ -691,13 +693,35 @@ def upload_report_pdf(pdf_bytes, public_id):
 # ---------------------------------------------------------------------------
 # webhook + routes
 # ---------------------------------------------------------------------------
-def send_webhook(payload):
+def send_webhook(payload, kind="lead"):
+    """Write the lead down, then try to deliver it.
+
+    This one already read the response status, so a rejected POST was never
+    mistaken for a delivery. What it did not do was keep the lead: an unset
+    WEBHOOK_URL returned {"configured": False} and the lead ceased to exist,
+    and a GHL outage raised past a caller with nothing written down behind it.
+    The record is written first now, so both are replayable.
+
+    Still raises on a rejected POST -- /api/analyze catches that and answers
+    502, which is the one caller in this app that already refused to report a
+    lead as landed when it had not.
+    """
+    row = lead_store.record({k: v for k, v in (payload or {}).items()
+                             if k != "report_json"}, kind=kind)
     if not WEBHOOK_URL:
-        return {"configured": False, "delivered": False}
-    resp = requests.post(WEBHOOK_URL, json=payload, timeout=12)
+        lead_store.mark(row, "failed: neither GHL_WEBHOOK_URL nor SMART1_WEBHOOK_URL is set")
+        return {"configured": False, "delivered": False, "lead_id": row.get("lead_id")}
+    try:
+        resp = requests.post(WEBHOOK_URL, json=payload, timeout=12)
+    except requests.RequestException as exc:
+        lead_store.mark(row, f"failed: {exc.__class__.__name__}")
+        raise
     if not resp.ok:
+        lead_store.mark(row, f"failed: HTTP {resp.status_code}")
         raise RuntimeError(f"GHL webhook returned {resp.status_code}: {resp.text[:180]}")
-    return {"configured": True, "delivered": True, "status": resp.status_code}
+    lead_store.mark(row, "sent", http_status=resp.status_code)
+    return {"configured": True, "delivered": True, "status": resp.status_code,
+            "lead_id": row.get("lead_id")}
 
 
 def validate(body):
@@ -719,7 +743,20 @@ def index():
 
 @app.get("/health")
 def health():
-    return jsonify({"ok": True, "service": "smart1ski"})
+    """Whether this app can do its job, not merely whether it booted."""
+    return jsonify({
+        "ok": True,
+        "status": "ok" if WEBHOOK_URL else "degraded",
+        "service": "smart1ski",
+        "lead_delivery": {
+            "webhook_configured": bool(WEBHOOK_URL),
+            "log": lead_store.leads_path(),
+            "owed": len(lead_store.unsent()),
+        },
+        "detail": ("" if WEBHOOK_URL else
+                   "No GHL_WEBHOOK_URL or SMART1_WEBHOOK_URL is set. Leads are being "
+                   "recorded and can be replayed with replay_failed.py once one is."),
+    })
 
 
 @app.post("/api/partial-lead")
@@ -745,7 +782,7 @@ def partial_lead():
             if v:
                 payload[k] = v[:300]
         try:
-            send_webhook(payload)
+            send_webhook(payload, kind="partial")
         except Exception as exc:
             app.logger.warning("Partial-lead webhook failed: %s", exc)
     except Exception:
